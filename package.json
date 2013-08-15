@@ -1,0 +1,28 @@
+{
+	"name": "Game",
+	"version": "0.0.0",
+	"author": "mgoszcz2",
+	"description": "A hackable MMO game based in space",
+	"contributors": [],
+	"scripts": {
+		"start": "node app.js"
+	},
+	"main": "./lib/http-server",
+	"dependencies" : {
+		"colors": "0.6.x",
+		"express": "3.3.x",
+		"mongojs": "0.7.x",
+        "bcrypt": "0.7.x",
+        "whiskers": "0.3.x",
+        "passport": "0.1.x",
+        "passport-local": "0.1.x"
+	},
+	"devDependencies": {
+	},
+	"bundledDependencies": [],  
+	"license": "Closed source",
+	"engines": {
+		"node": ">=0.10.13"
+	}
+}
+
