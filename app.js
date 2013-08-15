@@ -6,7 +6,7 @@ var user = require('./models/user');
 /*External libs*/
 var express = require('express');
 var colors = require('colors');
-var whiskers = require('whiskers');
+var jade  = require('jade');
 
 /*Passport libs*/
 var passport = require('passport');
@@ -36,8 +36,7 @@ passport.deserializeUser(function(id, done) {
 /*Web server code*/
 var app = express();
 app.set('views', 'views');
-app.set('view engine', 'whiskers');
-app.engine('.html', whiskers.__express);
+app.set('view engine', 'jade');
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.session({

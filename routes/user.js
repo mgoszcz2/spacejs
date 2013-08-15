@@ -14,7 +14,7 @@ module.exports = function(app, passport){
             utils.tryLog(err, "routes/user.post(/login)");
             console.log(info);
             if(!user){
-                response.render('login.html', {'error': true});
+                response.render('login', {'error': true});
             }else{
                 request.logIn(user, function(err) {
                     if(err)
@@ -66,7 +66,7 @@ module.exports = function(app, passport){
                         errors.password  = password;
                         errors.password2 = password2;
                         errors.email     = email;
-                        response.render('register.html', errors);
+                        response.render('register', errors);
                     }else{
                         user.register(username, email, password, function(){ response.redirect('/login.html'); });
                     }
@@ -76,6 +76,6 @@ module.exports = function(app, passport){
     });
 
     /*Oh.. Express.. Why can't you figure this out for yourself*/
-    app.get('/login.html',    function(request, response){ response.render('login.html',    {'error': false}); });
-    app.get('/register.html', function(request, response){ response.render('register.html', {'error': false}); });
+    app.get('/login.html',    function(request, response){ response.render('login',    {'error': false}); });
+    app.get('/register.html', function(request, response){ response.render('register', {'error': false}); });
 }

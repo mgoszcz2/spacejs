@@ -13,7 +13,7 @@
 		"express": "3.3.x",
 		"mongojs": "0.7.x",
         "bcrypt": "0.7.x",
-        "whiskers": "0.3.x",
+        "jade": "0.34.x",
         "passport": "0.1.x",
         "passport-local": "0.1.x"
 	},
