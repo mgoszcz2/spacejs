@@ -12,7 +12,6 @@ module.exports = function(app, passport){
     app.post('/login.html', function(request, response, next) {
         passport.authenticate('local', function(err, user, info) {
             utils.tryLog(err, "routes/user.post(/login)");
-            console.log(info);
             if(!user){
                 response.render('login', {'error': true});
             }else{
@@ -55,7 +54,6 @@ module.exports = function(app, passport){
                 errors.hasName = _hN;
                 user.checkEmail(email, function(_hE){
                     errors.hasEmail = _hE;
-                    console.log(errors);
 
                     /*We validated the shit out of registartion data - make decision*/
                     if(errors.misstype || errors.hasEmail || errors.hasName || errors.badName || errors.badEmail || errors.badPass){
