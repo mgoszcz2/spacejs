@@ -1,15 +1,16 @@
-/*Note to self: Do not fallback if POST data asbsent: Unless someone is
+/*Note to self: Do not fall-back if POST data absent: Unless someone is
 messing with the system, the fields will always be present*/
 
 module.exports = function(app, passport){
     var user = require('../models/user');
     var utils = require('../libs/utils');
+    var helpers = require('../libs/helpers');
 
     /*passport.js technomagic - It's wonderful but it doesn't seem to
     work to well with whikser templates even using 'flash-connect' lib,
     the workaround is to use a fancy callback system and use native rendering
     system*/
-    app.post('/login.html', function(request, response, next) {
+    app.post('/login.html', helpers.ensureNew('/play.html'), function(request, response, next) {
         passport.authenticate('local', function(err, user, info) {
             utils.tryLog(err, "routes/user.post(/login)");
             if(!user){
@@ -25,9 +26,9 @@ module.exports = function(app, passport){
         })(request, response, next);
     });
 
-    /*Server side verfication of login - errors store error states which get
+    /*Server side verification of login - errors store error states which get
     toggled during error checking*/
-    app.post('/register.html', function(request, response){
+    app.post('/register.html', helpers.ensureNew('/play.html'), function(request, response){
         var errors = {
             'misstype': false,
             'hasEmail': false,
@@ -55,10 +56,10 @@ module.exports = function(app, passport){
                 user.checkEmail(email, function(_hE){
                     errors.hasEmail = _hE;
 
-                    /*We validated the shit out of registartion data - make decision*/
+                    /*We validated the shit out of registration data - make decision*/
                     if(errors.misstype || errors.hasEmail || errors.hasName || errors.badName || errors.badEmail || errors.badPass){
-                        /*Add adtitional data to error data to help out register
-                        form to be user freindly*/
+                        /*Add additional data to error data to help out register
+                        form to be user friendly*/
                         errors.error     = true;
                         errors.username  = username;
                         errors.password  = password;
@@ -74,6 +75,6 @@ module.exports = function(app, passport){
     });
 
     /*Oh.. Express.. Why can't you figure this out for yourself*/
-    app.get('/login.html',    function(request, response){ response.render('login',    {'error': false}); });
-    app.get('/register.html', function(request, response){ response.render('register', {'error': false}); });
+    app.get('/login.html',    helpers.ensureNew('/play.html'), function(request, response){ response.render('login',    {'error': false}); });
+    app.get('/register.html', helpers.ensureNew('/play.html'), function(request, response){ response.render('register', {'error': false}); });
 }

@@ -1,9 +1,10 @@
 module.exports = function(app){
-    app.get('/play.html', function(request, response){
+    var helpers = require('../libs/helpers');
+    app.get('/play.html', helpers.ensureLoged('/'), function(request, response){
         response.render('play');
     });
 
-    app.get('/', function(request, response){
+    app.get('/', helpers.ensureNew('/play.html'), function(request, response){
         response.render('index');
     });
 }
