@@ -35,6 +35,7 @@ passport.deserializeUser(function(id, done) {
 var app = express();
 app.set('views', 'views');
 app.set('view engine', 'jade');
+app.locals.pretty = true; //Force jade to preety print everything
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.session({

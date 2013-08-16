@@ -5,13 +5,8 @@ block head
 
 block body
     form(method='post', action='login.html')
-        label(for='id') Username/Email 
-        input(name='id', type='text')
-
-        label(for='password') Password 
-        input(name='password', type='password')
-
+        input(name='id', type='text', placeholder='Username or email')
+        input(name='password', type='password', placeholder='Password')
         input(type='submit', value='Login')
-
     p A hackable MMO game based in space. Made by mgoszcz2
     a(href='register.html') Register
