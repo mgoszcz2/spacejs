@@ -1,11 +1,17 @@
-form(method='post', action='login.html')
-    label(for='id') Username/Email
-    input(name='id', type='text')
+extends templates/base
 
-    label(for='password') Password
-    input(name='password', type='password')
+block head
+    title space.js - A javascript hackable MMO game
 
-    input(type='submit', value='Login')
+block body
+    form(method='post', action='login.html')
+        label(for='id') Username/Email
+        input(name='id', type='text')
 
-p A hackable MMO game based in space. Made by mgoszcz2
-a(href='register.html') Register
+        label(for='password') Password
+        input(name='password', type='password')
+
+        input(type='submit', value='Login')
+
+    p A hackable MMO game based in space. Made by mgoszcz2
+    a(href='register.html') Register

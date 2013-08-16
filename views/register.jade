@@ -1,21 +1,27 @@
-if error
-    h4 Error occured
+extends templates/base
 
-form(method='post', action='register.html')
-    label(for='username') Name
-    input(name='username', type='text', value=username)
-    br
+block head
+    title space.js - Register
 
-    label(for='email') Email
-    input(name='email', type='text', value=email)
-    br
+block body
+    if error
+        h4 Error occured
 
-    label(for='password') Password
-    input(name='password', type='password', value=password)
-    br
+    form(method='post', action='register.html')
+        label(for='username') Name
+        input(name='username', type='text', value=username)
+        br
 
-    label(for='password2') Retype password
-    input(name='password2', type='password', value=password2)
-    br
+        label(for='email') Email
+        input(name='email', type='text', value=email)
+        br
 
-    input(type='submit', value='Register')
+        label(for='password') Password
+        input(name='password', type='password', value=password)
+        br
+
+        label(for='password2') Retype password
+        input(name='password2', type='password', value=password2)
+        br
+
+        input(type='submit', value='Register')

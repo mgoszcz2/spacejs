@@ -1,11 +1,17 @@
-if error
-    b Wrong username or password
+extends templates/base
 
-form(method='post', action='login.html')
-    label(for='id') Username/Email
-    input(name='id', type='text')
+block head
+    title space.js - Register
 
-    label(for='password') Password
-    input(name='password', type='password')
+block body
+    if error
+        b Wrong username or password
 
-    input(type='submit', value='Login')
+    form(method='post', action='login.html')
+        label(for='id') Username/Email
+        input(name='id', type='text')
+
+        label(for='password') Password
+        input(name='password', type='password')
+
+        input(type='submit', value='Login')
