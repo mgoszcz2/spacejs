@@ -1,0 +1,9 @@
+/* TEAM */
+Creator: Maciej Goszczycki
+Email: me@mgo2.me
+Twitter: mgoszcz2
+Location: Ireland
+
+/* SITE */
+Standards: HTML5, CSS3
+Software: vim, gimp, h5bp, bootstrap

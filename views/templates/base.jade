@@ -1,9 +1,19 @@
 block vars
 doctype 5
-html
+html(lang='en-GB')
     head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+        meta(name='description', content='')
+        meta(name='robots', content='all')
+        meta(name='viewport', content='width=device-width')
+        link(rel='stylesheet', href='/css/normalize.min.css')
+        link(rel='stylesheet', href='/css/main.css')
         block head
     body
         h1 space.js
         block body
         footer Copyright @ Maciej Goszczycki (mgoszcz2)
+        script(src='/js/vendor/html5shiv.js')
+        script(src='/js/vendor/jquery-1.10.2.min.js');
+        script(src='/js/main.js')
