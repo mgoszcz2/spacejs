@@ -45,9 +45,9 @@ module.exports = function(app, passport){
         if(username && email && password && password2){
             if(password != password2)
                 errors.misstype = true;
-            if(!/^[A-Z0-9]{6,}$/gi.test(password))
+            if(!/^[\w ]{6,}$/gi.test(password))
                 errors.badPass = true;
-            if(!/^[A-Z0-9]{2,}$/gi.test(username))
+            if(!/^[\w ]{2,32}$/gi.test(username))
                 errors.badName = true;
             if(!/^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/gi.test(email))
                 errors.badEmail = true;
@@ -67,7 +67,8 @@ module.exports = function(app, passport){
                         errors.email     = email;
                         response.render('register', errors);
                     }else{
-                        user.register(username, email, password, function(){ response.redirect('/login.html'); });
+                        user.register(username, email, password);
+                        response.redirect('/login.html');
                     }
                 });
             });
