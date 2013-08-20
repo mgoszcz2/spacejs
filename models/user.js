@@ -5,10 +5,13 @@ var bc = require('bcrypt');
 var utils = require('../libs/utils');
 var config = require('../config');
 
+var mongoPort = config.mongoPort;
+var bcryptCost = config.bcryptCost;
+
 /*Mongolian set up*/
 var Mongolian = require('mongolian')
 var ObjectId = Mongolian.ObjectId;
-var server = new Mongolian('127.0.0.1:'+config.mongoPort, {'log': new Object()});
+var server = new Mongolian('127.0.0.1:'+mongoPort, {'log': new Object()});
 var db = server.db("master");
 var users = db.collection('users');
 
@@ -66,5 +69,5 @@ user.register = function(username, email, password){
 }
 
 function hashPassword(password){
-    return bc.hashSync(password, config.bcryptCost);
+    return bc.hashSync(password, bcryptCost);
 }
