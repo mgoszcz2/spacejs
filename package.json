@@ -5,7 +5,8 @@
   "description": "A hackable MMO game based in space",
   "contributors": [],
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha -R spec"
   },
   "main": "./lib/http-server",
   "dependencies" : {
@@ -21,6 +22,9 @@
     "cookie": "0.1.x"
   },
   "devDependencies": {
+    "should": "1.2.x",
+    "mocha": "1.12.x",
+    "request": "2.27.x"
   },
   "bundledDependencies": [],  
   "license": "Closed source",
