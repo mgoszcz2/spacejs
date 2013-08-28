@@ -3,6 +3,7 @@ var cookie = require('cookie');
 var connect = require('connect');
 
 var config = require('../config');
+var user = require('../models/user');
 
 var ioLogLevel = config.ioLogLevel;
 var canUseFlash = config.canUseFlash;
@@ -40,12 +41,14 @@ module.exports = function(io, sessionStore){
         accept('Please login', false);
       }else{
         data.session = session;
+        data.username = 'changeme';
         accept(null, true);
       }
     });
   });
 
-  io.of('/rooms').on('connection', function(socket) {
-    socket.emit('update', []);
-  });
-}
+  /*Require other realtime modules*/
+  require('./rooms')(io.of('/rooms'));
+  //Spend ages debuging it - It still said ./rooms
+  require('./arena')(io.of('/arena'));
+};

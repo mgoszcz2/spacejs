@@ -10,7 +10,7 @@ module.exports = function(app, passport){
     work to well with whikser templates even using 'flash-connect' lib,
     the workaround is to use a fancy callback system and use native rendering
     system*/
-    app.post('/login.html', helpers.ensureNew('/play.html'), function(request, response, next) {
+    app.post('/login.html', helpers.ensureNew('/rooms.html'), function(request, response, next) {
         passport.authenticate('local', function(err, user, info) {
             utils.tryLog(err, "routes/user.post(/login)");
             if(!user){
@@ -20,7 +20,7 @@ module.exports = function(app, passport){
                     if(err)
                         utils.tryLog(err, "routes/user.post(/login){request.logIn}");
                     else
-                        response.redirect('play.html');
+                        response.redirect('rooms.html');
                 });
             }
         })(request, response, next);
@@ -28,7 +28,7 @@ module.exports = function(app, passport){
 
     /*Server side verification of login - errors store error states which get
     toggled during error checking*/
-    app.post('/register.html', helpers.ensureNew('/play.html'), function(request, response){
+    app.post('/register.html', helpers.ensureNew('/rooms.html'), function(request, response){
         var errors = {
             'misstype': false,
             'hasEmail': false,
@@ -36,7 +36,7 @@ module.exports = function(app, passport){
             'badName': false,
             'badEmail': false,
             'badPass': false,
-        }
+        };
         username  = request.body.username;
         password  = request.body.password;
         password2 = request.body.password2;
@@ -76,6 +76,6 @@ module.exports = function(app, passport){
     });
 
     /*Oh.. Express.. Why can't you figure this out for yourself*/
-    app.get('/login.html',    helpers.ensureNew('/play.html'), function(request, response){ response.render('login',    {'error': false}); });
-    app.get('/register.html', helpers.ensureNew('/play.html'), function(request, response){ response.render('register', {'error': false}); });
-}
+    app.get('/login.html',    helpers.ensureNew('/rooms.html'), function(request, response){ response.render('login',    {'error': false}); });
+    app.get('/register.html', helpers.ensureNew('/rooms.html'), function(request, response){ response.render('register', {'error': false}); });
+};

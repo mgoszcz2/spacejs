@@ -1,0 +1,12 @@
+extends templates/base
+
+block head
+    title space.js - Rooms
+
+block body
+    h1 Please pick a room
+    div#rooms
+
+block script
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/rooms.js')

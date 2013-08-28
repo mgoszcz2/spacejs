@@ -4,8 +4,12 @@ block head
     title space.js - Play
 
 block body
-    h1 Are you having fun in /play.html
+    h1 Let's fight
+    div#arena
+
+    textarea#code(rows='20', cols='60')
+    button#ready Ready!
 
 block script
     script(src='/socket.io/socket.io.js')
-    script(src='/js/play.js')
+    script(src='/js/arena.js')

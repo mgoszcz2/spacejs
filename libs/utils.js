@@ -1,5 +1,5 @@
 var colors = require('colors');
-var utils = {}
+var utils = {};
 module.exports = utils;
 
 /*Try to log if error evals to true*/
@@ -9,8 +9,12 @@ utils.tryLog = function(err, msg){
     return false;
   }
   return true;
-}
+};
 
 utils.argArray = function(arg){
   return [].slice.call(arg);
-}
+};
+
+utils.iss = function(str){
+  return (typeof str == 'string' || str instanceof String);
+};

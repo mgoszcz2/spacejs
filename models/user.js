@@ -16,9 +16,8 @@ var db = server.db("master");
 var users = db.collection('users');
 
 /*Exports*/
-var user = {}
+var user = {};
 module.exports = user;
-
 
 /*Check if user with following username exists*/
 user.checkName = function(name, callback){

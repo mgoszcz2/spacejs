@@ -28,4 +28,19 @@ describe("Utils", function(){
       })(1);
     });
   });
+  
+  describe("#iss()", function(){
+    it("should return true if string", function(){
+      utils.iss("").should.be.true;
+      utils.iss(new String()).should.be.true;
+    });
+    it("should return false if not string", function(){
+      utils.iss(undefined).should.be.false;
+      utils.iss(null).should.be.false;
+      utils.iss(0).should.be.false;
+      utils.iss(1).should.be.false;
+      utils.iss({}).should.be.false;
+      utils.iss([]).should.be.false;
+    });
+  });
 });

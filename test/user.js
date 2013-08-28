@@ -1,12 +1,11 @@
 var should = require('should');
 var user = require('../models/user');
-var userid = null;
+var userid = "123456123456123456123456";
 
 describe('User model', function(){
   before(function(done){
     user.register('[test]', '[email]', '[password]');
     done();
-    user.login('[email]', '[password]', function(error, res){ userid = res._id.toString() });
   });
 
   describe('#register()', function(){

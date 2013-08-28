@@ -1,4 +1,4 @@
-var config = {}
+var config = {};
 
 //Port used by http server
 config.port = 1024;
@@ -22,6 +22,9 @@ config.canUseFlash = true;
 config.secret = 'hello world is the secret';
 
 //Session cookie name
-config.sessionCookie = 'sid'
+config.sessionCookie = 'sid';
+
+//Room cache time, ms
+config.roomCache = 1000;
 
 module.exports = config;
