@@ -22,6 +22,7 @@ module.exports = function(io, sessionStore){
   io.enable('browser client minification');
   io.enable('browser client gzip');
   io.enable('browser client etag');
+  io.enable('authorization'); //Enable aut
   io.set('log level', ioLogLevel);
   io.set('transports', transports);
 
@@ -40,6 +41,7 @@ module.exports = function(io, sessionStore){
       }else if(!session){
         accept('Please login', false);
       }else{
+        //TODO
         data.session = session;
         data.username = 'changeme';
         accept(null, true);

@@ -1,3 +1,8 @@
+//Helper functions
+function xy(x, y){
+  return {'x': x, 'y': y};
+}
+
 var config = {};
 
 //Port used by http server
@@ -26,5 +31,19 @@ config.sessionCookie = 'sid';
 
 //Room cache time, ms
 config.roomCache = 1000;
+
+//Size of the room
+config.roomSize = xy(900, 800);
+
+//Max robot move in pixels
+config.maxMove = 250;
+
+//Robot starting postions
+config.startPos = [
+  xy(50, 50),
+  xy(50, config.roomSize.y - 50),
+  xy(config.roomSize.x - 50, 50),
+  xy(config.roomSize.x - 50, config.roomSize.y - 50),
+];
 
 module.exports = config;

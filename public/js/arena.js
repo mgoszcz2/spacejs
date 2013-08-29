@@ -9,12 +9,12 @@ arena.socket.on('error', function (reason){
 });
 arena.on('connect', function(){ });
 /*No room error*/
-arena.on('no_room', function(){
-  alert('No room');
+arena.on('no_room', function(data){
+  alert(data);
   window.location.pathname = '/rooms.html';
 });
 
-/*User - user magnament*/
+/*User - user management*/
 arena.on('joined', function(data){ plist.push(data); });
 arena.on('left', function(data){
   plist = array.filter(function(i){
@@ -22,33 +22,63 @@ arena.on('left', function(data){
   });
 });
 
-/*Emit join event when user clicked Ready! button*/
+
+/*Turn based stuff*/
 var code;
+
+//DRY
+function startTurn(){
+  eval(code);
+}
+function handleData(data){
+  console.log(data);
+}
 $('#ready').click(function(){
   arena.emit('join', {'roomn': window.location.hash});
   code = $('#code').val();
-  $(this).remove();
+  $('#read').remove();
   $('#code').remove();
 });
-arena.on('start', function(data){ eval(code); });
+arena.on('start', function(data){ startTurn(); });
 
-/*Freindrish utils*/
+arena.on('update', function(data){
+  handleData(data);
+  startTurn();
+});
+
+
+/*Friend-ish utils*/
 var utils = {};
+var ship = {'gun': {}};
+var queue = {};
+
 utils.print = function(str){
-  alert(str)
+  log(0, str);
 }
-var ship = {}
-ship.forward = function(num, callback){
-  if(!num) num = 1;
-  if(!callback) callback = new Function();
 
-  console.log("Moving", num, "forward");
-  arena.emit("sevent", {'action': 'forward', 'value': num}, callback);
+ship.move = function(num){
+  if(!num) num = 1;
+  queue.move = {'action': 'forward', 'value': num};
 }
-ship.rotate = function(num, callback){
-  if(!num) num = 1;
-  if(!callback) callback = new Function();
 
-  console.log("Rotating", num, "deg");
-  arena.emit("sevent", {'action': 'rotate', 'value': num}, callback);
+ship.turn = function(num){
+  if(!num) num = 1;
+  queue.turn = {'action': 'turn', 'value': num};
+}
+
+ship.gun.turn = new Function();
+ship.gun.fire = new Function();
+
+ship.ready = function(){
+  arena.emit('sevent', queue);
+  queue = {};
+}
+
+/*GUI logger*/
+function log(){
+  var args = $.makeArray(arguments);
+  var lvl = args.shift();
+  var msg = args.join(' ');
+
+  $('#logger').append(["Info", "Warn", "Error", "Debug"][lvl]+": "+msg+"<br>");
 }
