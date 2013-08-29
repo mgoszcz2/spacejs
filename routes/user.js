@@ -75,6 +75,11 @@ module.exports = function(app, passport){
         }
     });
 
+    app.get('/logout.html', helpers.ensureLoged('/'), function(request, response){
+      request.logout();
+      response.redirect('/');
+    });
+
     /*Oh.. Express.. Why can't you figure this out for yourself*/
     app.get('/login.html',    helpers.ensureNew('/rooms.html'), function(request, response){ response.render('login',    {'error': false}); });
     app.get('/register.html', helpers.ensureNew('/rooms.html'), function(request, response){ response.render('register', {'error': false}); });

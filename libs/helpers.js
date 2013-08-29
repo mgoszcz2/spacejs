@@ -20,3 +20,8 @@ helpers.ensureNew = function(dir){
             next();
     }
 }
+
+helpers.addUserData = function(request, response, next){
+  response.locals.username = request.user.username;
+  next();
+}
