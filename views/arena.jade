@@ -1,16 +1,19 @@
 extends templates/base
 
 block head
-    title space.js - Play
+  title space.js - Play
 
 block body
-    h1 Let's fight
-    div#arena
+  h1 Let's fight
+  canvas(id='arena', height='200', width='200')
 
-    textarea#code(rows='20', cols='60')
-    button#ready Ready!
-    div#logger
+  div#code
+  button#ready Ready!
+
+  div#logger
 
 block script
-    script(src='/socket.io/socket.io.js')
-    script(src='/js/arena.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='/js/vendor/artisan-min.js')
+  script(src='/js/vendor/ace/ace.js')
+  script(src='/js/arena.js')

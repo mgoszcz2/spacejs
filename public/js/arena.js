@@ -10,7 +10,7 @@ arena.socket.on('error', function (reason){
 arena.on('connect', function(){ });
 /*No room error*/
 arena.on('no_room', function(data){
-  alert(data);
+  log(data, 2);
   window.location.pathname = '/rooms.html';
 });
 
@@ -22,22 +22,61 @@ arena.on('left', function(data){
   });
 });
 
+/*Set up ace*/
+var editor = ace.edit('code');
+editor.setTheme('ace/theme/monokai');
+editor.setHighlightActiveLine(false);
+editor.setShowPrintMargin(false);
+editor.getSession().setUseWorker(false);
+editor.getSession().setMode('ace/mode/javascript');
+editor.insert("//Your code goes here");
+
+/*Ace hiding*/
+function codeOff(){
+  $('#ready').hide();
+  $('#code').animate({
+    'height': '0%'
+  }, 500, function(){
+    $('#logger').animate({
+      'height': '30%'
+    }, 500, function(){
+      log.log("Logger started", 3);
+    });
+  });
+}
 
 /*Turn based stuff*/
 var code;
 
 //DRY
 function startTurn(){
-  eval(code);
+  try{
+    eval(code);
+  }catch(e){
+    log(e, 2);
+  }
 }
 function handleData(data){
-  console.log(data);
+  artisan.clearCanvas('arena');
+  for(i in data){
+    var i = data[i];
+    artisan.rotateCanvas('arena', i.angle);
+    artisan.drawRectangle(
+      'arena',
+      i.pos.x,
+      i.pos.y,
+      20,
+      20,
+      '#ff0000'
+    );
+    artisan.rotateCanvas('arena', -i.angle);
+  }
 }
+
 $('#ready').click(function(){
   arena.emit('join', {'roomn': window.location.hash});
-  code = $('#code').val();
-  $('#read').remove();
-  $('#code').remove();
+  code = editor.getValue();
+  codeOff();
 });
 arena.on('start', function(data){ startTurn(); });
 
@@ -46,19 +85,18 @@ arena.on('update', function(data){
   startTurn();
 });
 
-
 /*Friend-ish utils*/
 var utils = {};
 var ship = {'gun': {}};
 var queue = {};
 
 utils.print = function(str){
-  log(0, str);
+  log(str, 0);
 }
 
 ship.move = function(num){
   if(!num) num = 1;
-  queue.move = {'action': 'forward', 'value': num};
+  queue.move = {'action': 'move', 'value': num};
 }
 
 ship.turn = function(num){
@@ -74,11 +112,15 @@ ship.ready = function(){
   queue = {};
 }
 
-/*GUI logger*/
-function log(){
-  var args = $.makeArray(arguments);
-  var lvl = args.shift();
-  var msg = args.join(' ');
+/*Loggin util*/
+var log = {};
+log.log = function(str, lvl){
+  $('<div>', {
+    'class': ["log-info", "log-warn", "log-err", "log-ok"][lvl],
+    'text': str
+  }).prependTo('#logger');
+}
 
-  $('#logger').append(["Info", "Warn", "Error", "Debug"][lvl]+": "+msg+"<br>");
+log.clear = function(){
+  $('#logger').empty();
 }

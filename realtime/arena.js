@@ -28,14 +28,14 @@ module.exports = function(io){
       var userdata = rooms[socket.roomn].user[socket.handshake.username];
       //Handle actions
       if(e.turn){
-          if(e.value >= 0 && e.value <= 360)
-            userdata.angle = e.value;
+          if(e.turn.value >= 0 && e.turn.value <= 360)
+            userdata.angle = e.turn.value;
       }
 
       if(e.move){
         userdata.pos = getXY(
           userdata.pos,
-          e.value <= maxMove ? e.value : maxMove,
+          e.move.value <= maxMove ? e.move.value : maxMove,
           userdata.angle
         );
       }
@@ -44,7 +44,7 @@ module.exports = function(io){
       rooms[socket.roomn].done += 1;
       if(rooms[socket.roomn].done == rooms[socket.roomn].limit){
         rooms[socket.roomn].done = 0;
-        io.in(socket.roomn).emit('update',rooms[socket.roomn]);
+        io.in(socket.roomn).emit('update',rooms[socket.roomn].user);
       }
     }
 
@@ -63,6 +63,7 @@ module.exports = function(io){
         'user': {}
       };
       rooms[room].user[username] = {
+        'count': rooms[room].count + 1,
         'angle': 0,
         'pos': startPos[rooms[room].count],
       };
