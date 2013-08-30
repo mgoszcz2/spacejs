@@ -10,7 +10,7 @@ arena.socket.on('error', function (reason){
 arena.on('connect', function(){ });
 /*No room error*/
 arena.on('no_room', function(data){
-  log(data, 2);
+  log.log(data, 2);
   window.location.pathname = '/rooms.html';
 });
 
@@ -53,7 +53,7 @@ function startTurn(){
   try{
     eval(code);
   }catch(e){
-    log(e, 2);
+    log.log(e, 2);
   }
 }
 function handleData(data){
@@ -91,7 +91,7 @@ var ship = {'gun': {}};
 var queue = {};
 
 utils.print = function(str){
-  log(str, 0);
+  log.log(str, 0);
 }
 
 ship.move = function(num){
