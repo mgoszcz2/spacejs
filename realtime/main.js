@@ -1,5 +1,5 @@
 /*External libs*/
-var cookie = require('cookie');
+var cookielib = require('cookie');
 var connect = require('connect');
 
 var config = require('../config');
@@ -32,19 +32,20 @@ module.exports = function(io, sessionStore){
     if (!data.headers.cookie)
       return accept('Please login', false);
 
-    data.cookie = cookie.parse(data.headers.cookie);
-    data.sessionID = connect.utils.parseSignedCookie(data.cookie[sessionCookie], secret);
+    var cookie = cookielib.parse(data.headers.cookie);
+    var sessionID = connect.utils.parseSignedCookie(cookie[sessionCookie], secret);
 
-    sessionStore.get(data.sessionID, function(error, session){
+    sessionStore.get(sessionID, function(error, session){
       if(error){
         accept('Internal error', false);
       }else if(!session){
         accept('Please login', false);
       }else{
-        //TODO
-        data.session = session;
-        data.username = 'changeme';
-        accept(null, true);
+        user.getId(session.passport.user, function(userData){
+          data.username = userData.username;
+          data.userData = userData;
+          accept(null, true);
+        });
       }
     });
   });

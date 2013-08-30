@@ -11,13 +11,15 @@ html(lang='en-GB')
     block head
 
   body
-    h1 space.js
-
-    if username
-      span= username
-      a(href='/logout.html') Logout
-    else
-      a(href='/login.html') Login
+    nav
+      a(href='/'): h1 space.js
+      section
+        if username
+          span= username
+          a(href='/logout.html') Logout
+        else
+          a(href='/login.html') Login
+      div.clear
 
     block body
 
