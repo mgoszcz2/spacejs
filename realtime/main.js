@@ -42,9 +42,13 @@ module.exports = function(io, sessionStore){
         accept('Please login', false);
       }else{
         user.getId(session.passport.user, function(userData){
-          data.username = userData.username;
-          data.userData = userData;
-          accept(null, true);
+          if(userData && userData.username){
+            data.username = userData.username;
+            data.userData = userData;
+            accept(null, true);
+          }else{
+            accept("Can't get user data", false);
+          }
         });
       }
     });

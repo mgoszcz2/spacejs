@@ -56,20 +56,24 @@ function startTurn(){
     log.log(e, 2);
   }
 }
+
+/*Data handling*/
 function handleData(data){
-  artisan.clearCanvas('arena');
+  $('#arena').empty();
   for(i in data){
     var i = data[i];
-    artisan.rotateCanvas('arena', i.angle);
-    artisan.drawRectangle(
-      'arena',
-      i.pos.x,
-      i.pos.y,
-      20,
-      20,
-      '#ff0000'
-    );
-    artisan.rotateCanvas('arena', -i.angle);
+    $('<div>', {
+      'class': 'robot'
+    }).css({
+      'top': i.pos.y,
+      'left': i.pos.x,
+      '-webkit-transform' : 'rotate('+i.angle+'deg)',
+      '-moz-transform' : 'rotate('+i.angle+'deg)',  
+      '-ms-transform' : 'rotate('+i.angle+'deg)',  
+      '-o-transform' : 'rotate('+i.angle+'deg)',  
+      'transform' : 'rotate('+i.angle+'deg)',  
+      'zoom' : 1
+    }).appendTo('#arena');
   }
 }
 

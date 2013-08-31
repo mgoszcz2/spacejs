@@ -5,7 +5,7 @@ block head
 
 block body
   h1 Let's fight
-  canvas(id='arena', height='200', width='200')
+  div#arena
 
   div#code
   button#ready Ready!
@@ -14,6 +14,5 @@ block body
 
 block script
   script(src='/socket.io/socket.io.js')
-  script(src='/js/vendor/artisan-min.js')
   script(src='/js/vendor/ace/ace.js')
   script(src='/js/arena.js')

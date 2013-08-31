@@ -15,10 +15,10 @@ module.exports = function(io){
   io.on('connection', function(socket){
 
     function getXY(xy, dist, angle){
-      var radin = angle * (Math.Pi/180);
+      var radin = angle * (Math.PI/180);
       return {
-        'x': (Math.sin(angle) * dist) + xy.x,
-        'y': (Math.cos(angle) * dist) + xy.y
+        'x': (Math.sin(radin) * dist) + xy.x,
+        'y': (Math.cos(radin) * dist) + xy.y
       };
     }
 
@@ -38,6 +38,9 @@ module.exports = function(io){
           e.move.value <= maxMove ? e.move.value : maxMove,
           userdata.angle
         );
+        userdata.lastMove = e.value;
+      }else{
+        userData.lastMove = null;
       }
 
       //Check has everyone finished their move

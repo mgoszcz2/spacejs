@@ -70,3 +70,17 @@ footer{
 .log-ok {
   color: #2ecc71;
 }
+
+#arena{
+  width: 300px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+#arena .robot {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: #ff0000;
+}
