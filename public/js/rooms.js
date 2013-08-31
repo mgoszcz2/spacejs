@@ -14,7 +14,7 @@ rooms.on('update', function(data){
   data.forEach(function(i){
     //funny - no need to encode url
     $('<a>',{
-      'text': i.name,
+      'html': i.name+'<br>',
       'href': '/arena.html#' + i.name
     }).appendTo('#rooms');
   });

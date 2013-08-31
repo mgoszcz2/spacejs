@@ -8,11 +8,13 @@ html(lang='en-GB')
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='/css/normalize.min.css')
     link(rel='stylesheet', href='/css/main.css')
+    link(href='http://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet', type='text/css')
     block head
 
   body
     nav
       a(href='/'): h1 space.js
+      a(href='/spec') API
       section
         if username
           span= username

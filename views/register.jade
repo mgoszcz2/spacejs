@@ -7,25 +7,26 @@ block body
     if error
         h4 Error occured
 
-    form(method='post', action='register.html')
-        label(for='username') Name
-        br
-        input(name='username', type='text', value=username)
-        br
+    article
+      form(method='post', action='register.html')
+          label(for='username') Name
+          br
+          input(name='username', type='text', value=username)
+          br
 
-        label(for='email') Email
-        br
-        input(name='email', type='text', value=email)
-        br
+          label(for='email') Email
+          br
+          input(name='email', type='text', value=email)
+          br
 
-        label(for='password') Password
-        br
-        input(name='password', type='password', value=password)
-        br
+          label(for='password') Password
+          br
+          input(name='password', type='password', value=password)
+          br
 
-        label(for='password2') Retype password
-        br
-        input(name='password2', type='password', value=password2)
-        br
+          label(for='password2') Retype password
+          br
+          input(name='password2', type='password', value=password2)
+          br
 
-        input(type='submit', value='Register')
+          input(type='submit', value='Register')

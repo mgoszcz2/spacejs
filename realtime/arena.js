@@ -22,6 +22,17 @@ module.exports = function(io){
       };
     }
 
+    function hitWall(pos){
+      var x = pos.x - 50;
+      var y = pos.y - 50;
+      if(x <= 0 || x >= roomSize.x ||
+         y <= 0 || y >= roomSize.y){
+          return true;
+      }else{
+        return false;
+      }
+    }
+
     /*Ship updater*/
     //TODO - Handle timeouts
     function shipdo(e){
@@ -32,16 +43,13 @@ module.exports = function(io){
             userdata.angle = e.turn.value;
       }
 
-      if(e.move){
-        userdata.pos = getXY(
+      userdata.pos = getXY(
           userdata.pos,
           e.move.value <= maxMove ? e.move.value : maxMove,
           userdata.angle
         );
-        userdata.lastMove = e.value;
-      }else{
-        userData.lastMove = null;
-      }
+
+      userdata.hitwall = hitWall(userdata.pos);
 
       //Check has everyone finished their move
       rooms[socket.roomn].done += 1;
@@ -68,13 +76,15 @@ module.exports = function(io){
       rooms[room].user[username] = {
         'count': rooms[room].count + 1,
         'angle': 0,
+        'hitwall': false,
         'pos': startPos[rooms[room].count],
       };
       rooms[room].count += 1;
     }
 
-    socket.on('join', function(data){
+    socket.on('join', function(data, fn){
       //Make sure roomn is defined
+      fn(socket.handshake.username);
       if(!data.roomn || !utils.iss(data.roomn) || !cache[data.roomn.substring(1)]) smallKick("Room doesn't exit")
       else{
         //Remove hash from url hash and make sure room isn't full

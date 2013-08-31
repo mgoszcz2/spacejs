@@ -25,6 +25,8 @@ nav section {
 }
 
 body {
+  font-size: 18px;
+  font-family: 'Ubuntu Mono', sans-serif;
 }
 
 body, 
@@ -33,6 +35,11 @@ a {
 }
 
 footer{
+  margin: 20px auto;
+  text-align: center;
+}
+
+article {
   margin: 20px;
 }
 
@@ -58,6 +65,10 @@ footer{
   overflow: hidden;
 }
 
+#rooms {
+  text-align: center;
+}
+
 .log-info {
   color: #3498db;
 }
@@ -76,11 +87,13 @@ footer{
   height: 300px;
   position: relative;
   overflow: hidden;
+  background-color: #95a5a6;
+  margin: 0 auto;
 }
 
 #arena .robot {
-  width: 20px;
-  height: 20px;
+  width: 80px;
+  height: 50px;
   position: absolute;
-  background-color: #ff0000;
+  background-color: #16a085;
 }

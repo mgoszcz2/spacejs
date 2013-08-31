@@ -4,9 +4,17 @@ block head
     title space.js - A javascript hackable MMO game
 
 block body
+  article
     form(method='post', action='login.html')
-        input(name='id', type='text', placeholder='Username or email')
-        input(name='password', type='password', placeholder='Password')
-        input(type='submit', value='Login')
+      input(name='id', type='text', placeholder='Username or email')
+      input(name='password', type='password', placeholder='Password')
+      input(type='submit', value='Login')
     p A hackable MMO game based in space. Made by mgoszcz2
     a(href='register.html') Register
+
+  div#code
+
+
+block script
+  script(src='/js/vendor/ace/ace.js')
+  script(src='/js/index.js')

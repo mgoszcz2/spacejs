@@ -12,4 +12,8 @@ module.exports = function(app){
   app.get('/', helpers.ensureNew('/rooms.html'), function(request, response){
     response.render('index');
   });
+
+  app.get('/spec', function(request, response){
+    response.render('spec');
+  });
 };

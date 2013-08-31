@@ -1,0 +1,35 @@
+extends templates/base
+
+block head
+  title space.js - API
+
+block body
+  h1 API 
+  h2 radar.scan()
+  | Returns an array of all ships in the arena
+  h2 ship.ready()
+  | Call when you finished your move
+  h2 ship.turnBy([N])
+  | Turn by N degrees relatively
+  h2 ship.turn([N])
+  | turn N degrees
+  h2 ship.move([N])
+  | Move N steps forward
+  h2 ship.hitWall()
+  | Has a robot hit wall
+  h2 utils.print(str)
+  | Print a object
+  h2 utils.makeRelative(N)
+  | Make absolute angle relative
+  h2 uitls.getAngle(A, B)
+  | Get get angle between two points
+  h2 utils.getDist(A, B)
+  | Get distance beetwen two points
+  h1 Not yet implemented
+  h2 gun.turn
+  h2 gun.fire
+
+block script
+  script(src='/socket.io/socket.io.js')
+  script(src='/js/vendor/ace/ace.js')
+  script(src='/js/arena.js')
