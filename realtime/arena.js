@@ -25,12 +25,9 @@ module.exports = function(io){
     function hitWall(pos){
       var x = pos.x - 50;
       var y = pos.y - 50;
-      if(x <= 0 || x >= roomSize.x ||
-         y <= 0 || y >= roomSize.y){
-          return true;
-      }else{
-        return false;
-      }
+
+      if(x <= 0 || x >= roomSize.x || y <= 0 || y >= roomSize.y) return true;
+      else return false;
     }
 
     /*Ship updater*/
@@ -39,8 +36,8 @@ module.exports = function(io){
       var userdata = rooms[socket.roomn].user[socket.handshake.username];
       //Handle actions
       if(e.turn){
-          if(e.turn.value >= 0 && e.turn.value <= 360)
-            userdata.angle = e.turn.value;
+        if(e.turn.value >= 0 && e.turn.value <= 360)
+          userdata.angle = e.turn.value;
       }
 
       userdata.pos = getXY(
@@ -85,8 +82,10 @@ module.exports = function(io){
     socket.on('join', function(data, fn){
       //Make sure roomn is defined
       fn(socket.handshake.username);
-      if(!data.roomn || !utils.iss(data.roomn) || !cache[data.roomn.substring(1)]) smallKick("Room doesn't exit")
-      else{
+
+      if(!data.roomn || !utils.iss(data.roomn) || !cache[data.roomn.substring(1)])
+        smallKick("Room doesn't exit")
+      else {
         //Remove hash from url hash and make sure room isn't full
         data.roomn = data.roomn.substring(1);
         socket.roomn = data.roomn;

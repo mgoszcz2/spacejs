@@ -6,7 +6,7 @@ if(window.location.pathname != '/arena.html' && loc.hash != ''){
   var scrollH;
 
   if ("pushState" in history) history.pushState("", document.title, loc.pathname + loc.search);
-  else{
+  else {
     scrollV = document.body.scrollTop;
     scrollH = document.body.scrollLeft;
     loc.hash = "";

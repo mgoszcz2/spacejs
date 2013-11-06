@@ -16,8 +16,8 @@ module.exports = room;
 
 room.listRooms = function(callback){
   rooms.find().toArray(function(error, array){
-    utils.tryLog(error, "models/room.listRooms"); 
-    callback(array); 
+    utils.tryLog(error, "models/room.listRooms");
+    callback(array);
   });
 };
 

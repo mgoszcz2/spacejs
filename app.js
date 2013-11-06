@@ -22,17 +22,17 @@ var secret = config.secret;
 
 /*Passport local strategy using user.login model*/
 passport.use(new LocalStrategy({
-    usernameField: 'id'
+  usernameField: 'id'
 }, user.login));
 
 /*Passport serialization*/
 passport.serializeUser(function(user, done) {
-    done(null, user._id.toString());
+  done(null, user._id.toString());
 });
 passport.deserializeUser(function(id, done) {
-    user.getId(id, function(user) {
-        done(null, user);
-    });
+  user.getId(id, function(user) {
+    done(null, user);
+  });
 });
 
 /*Web server code*/
@@ -41,9 +41,9 @@ var app = express();
 /*Akward stuff to make socket.io sessions work*/
 var sessionStore = new connect.session.MemoryStore();
 var sessionPref = {
-    'secret': secret,
-    'key': sessionCookie,
-    'store': sessionStore
+  'secret': secret,
+  'key': sessionCookie,
+  'store': sessionStore
 }
 
 app.set('views', 'views');

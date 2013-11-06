@@ -28,7 +28,7 @@ describe("Utils", function(){
       })(1);
     });
   });
-  
+
   describe("#iss()", function(){
     it("should return true if string", function(){
       utils.iss("").should.be.true;
