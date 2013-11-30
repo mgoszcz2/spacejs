@@ -5,31 +5,30 @@
   "description": "A hackable MMO game based in space",
   "contributors": [],
   "scripts": {
-    "start": "node app.js",
-    "test": "mocha -R spec"
+    "start": "./node_modules/coffee-script/bin/coffee app.coffee"
   },
   "main": "./lib/http-server",
-  "dependencies" : {
-    "colors": "0.6.x",
-    "express": "3.3.x",
-    "mongolian": "0.1.x",
-    "bcrypt": "0.7.x",
-    "jade": "0.34.x",
-    "passport": "0.1.x",
-    "passport-local": "0.1.x",
-    "socket.io": "0.9.x",
-    "connect": "2.8.x",
-    "cookie": "0.1.x"
+  "dependencies": {
+    "colors": "~0.6.x",
+    "express": "~3.3.x",
+    "mongolian": "~0.1.x",
+    "bcrypt": "~0.7.x",
+    "jade": "~0.34.x",
+    "passport": "~0.1.x",
+    "passport-local": "~0.1.x",
+    "socket.io": "~0.9.x",
+    "connect": "~2.8.x",
+    "cookie": "~0.1.x",
+    "coffee-script": "~1.6.3"
   },
   "devDependencies": {
-    "should": "1.2.x",
-    "mocha": "1.12.x",
-    "request": "2.27.x"
+    "should": "~1.2.x",
+    "mocha": "~1.12.x",
+    "request": "~2.27.x"
   },
-  "bundledDependencies": [],  
+  "bundledDependencies": [],
   "license": "Closed source",
   "engines": {
     "node": ">=0.10.13"
   }
 }
-
