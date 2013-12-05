@@ -1,5 +1,5 @@
 should = require 'should'
-arena = require '../realtime/arena'
+arena = require '../src/realtime/arena'
 
 
 

@@ -19,7 +19,7 @@ arena.socket.on('error', function (reason){
 arena.on('connect', function(){ });
 /*No room error*/
 arena.on('no_room', function(data){
-  log.log(data, 2);
+  console.log(data, 2);
   window.location.pathname = '/rooms.html';
 });
 

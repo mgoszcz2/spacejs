@@ -152,7 +152,7 @@ class arena.Rooms
   updateData: (@data, logUpdate = yes) ->
     # Let us know we did it
     if logUpdate
-      utils.log "realtime.Rooms#updateData", "Room data updated: #{@data.length} enteries"
+      utils.log "Room data updated: #{@data.length} enteries"
 
     for r in @data
       unless isDef @rooms[r.name]
@@ -177,12 +177,13 @@ arena.main = (io) ->
 
 
     kick = (str) ->
+      utils.log "Kicking user #{str}"
       socket.emit "no_room", str
       socket.disconnect()
 
 
     socket.on "join", (data, acknowledge) ->
-      uitls.log "realtime/arena#main (on join)", "#{username} joined"
+      utils.log "#{username} joined"
       acknowledge socket.handshake.username
       roomName = socket.roomn = data.roomn.substring 1 #Remove hash from url
 

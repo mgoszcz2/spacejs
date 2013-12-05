@@ -9,8 +9,8 @@ utils.tryLog = (err, msg) ->
     return false
   true
 
-utils.log = (tag, msg) ->
-    console.log "[#{process.pid}] (#{tag}) #{msg}".green
+utils.log = (msg) ->
+    console.log "[#{process.pid}] (LOG) #{msg}".green
 
 utils.argArray = (arg) ->
   [].slice.call arg

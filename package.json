@@ -4,10 +4,19 @@
   "author": "mgoszcz2",
   "description": "A hackable MMO game based in space",
   "contributors": [],
+
   "scripts": {
-    "start": "./node_modules/coffee-script/bin/coffee app.coffee",
-    "test": "./node_modules/mocha/bin/mocha --compilers coffee:coffee-script -R progress"
+    "start": "./node_modules/coffee-script/bin/coffee src/app.coffee",
+    "test": "./node_modules/mocha/bin/mocha -R progress",
+    "cover": "./node_modules/mocha/bin/mocha -r blanket -R html-cov > coverage.html",
+    "blanket": {
+      "loader": "./node-loaders/coffee-script",
+      "pattern": "src",
+      "data-cover-never": "node_modules"
+    }
   },
+
+
   "main": "./lib/http-server",
   "dependencies": {
     "colors": "~0.6.x",
@@ -26,7 +35,8 @@
   "devDependencies": {
     "should": "~1.2.x",
     "mocha": "~1.12.x",
-    "request": "~2.27.x"
+    "request": "~2.27.x",
+    "blanket": "~1.1.5"
   },
   "bundledDependencies": [],
   "license": "Closed source",

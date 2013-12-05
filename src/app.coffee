@@ -41,7 +41,7 @@ sessionPref =
   key: sessionCookie
   store: sessionStore
 
-app.set 'views', 'views'
+app.set 'views', "#{__dirname}/views"
 app.set 'view engine', 'jade'
 app.locals.pretty = true #Force jade to preety print everything
 app.enable 'strict routing'
@@ -56,7 +56,7 @@ app.use passport.session()
 require('./routes/user') app, passport
 require('./routes/main') app
 app.use app.router #Make sure routes do their thing. See http://stackoverflow.com/questions/12695591
-app.use express.static 'public' #Use public as the static dir
+app.use express.static "#{__dirname}/public" #Use public as the static dir
 
 #WTF! socket.io website is all wrong - https://github.com/LearnBoost/socket.io/issues/941
 io = socket.listen app.listen port
