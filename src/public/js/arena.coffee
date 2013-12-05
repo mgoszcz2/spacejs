@@ -1,14 +1,14 @@
-#Stack Overflow!
+# Get room name
+getRoomName = -> window.location.hash.substring 1
 
-#Connection boilerplate
+# Try to send disconnect signal on unload
+arena = io.connect 'http://localhost/arena', 'sync disconnect on unload': true
 
-#No room error
+$ ->
+  # Notify nicely if room is full
+  arena.emit 'isFull', getRoomName(), (isFull) ->
+    alert "Room is Full!" if isFull
 
-#User - user management
-
-#Set up ace
-
-#Ace hiding
 codeOff = ->
   $('#ready').hide()
 
@@ -17,10 +17,6 @@ codeOff = ->
       log.log 'Logger started', 3
 
 
-
-#Turn based stuff
-
-#DRY
 startTurn = ->
   try
     eval code
@@ -55,7 +51,6 @@ jQuery.fn.rotate = (degrees) ->
 
   return this
 
-arena = io.connect 'http://localhost/arena', 'sync disconnect on unload': true
 user = null
 
 arena.socket.on 'error', (reason) ->
@@ -83,7 +78,7 @@ code = undefined
 turnData = undefined
 $('#ready').click ->
   arena.emit 'join',
-    roomn: window.location.hash
+    roomn: getRoomName()
   , (data) ->
     user = data
 

@@ -152,7 +152,7 @@ class arena.Rooms
   updateData: (@data, logUpdate = yes) ->
     # Let us know we did it
     if logUpdate
-      utils.log "Room data updated: #{@data.length} enteries"
+      utils.infoLog "Room data updated: #{@data.length} enteries"
 
     for r in @data
       unless isDef @rooms[r.name]
@@ -164,7 +164,12 @@ class arena.Rooms
 
 
 
-
+# Data in the socket object:
+# socket
+#   roomn
+#   handshake
+#     username
+#   tryleave
 arena.main = (io) ->
   # Create singelton and update the info
   rooms = new arena.Rooms config.roomSize, config.startPos
@@ -175,21 +180,27 @@ arena.main = (io) ->
     roomName = socket.roomn #Ignore if not set we will re-set it anyway if so
     userName = socket.handshake.username #Change to camel case later
 
+    socket.tryLeave = no #We haven't joined
 
-    kick = (str) ->
-      utils.log "Kicking user #{str}"
-      socket.emit "no_room", str
+
+    kick = (reason) ->
+      utils.log "Kicking user #{userName}, reason: #{reason}"
+      socket.emit "no_room", reason
       socket.disconnect()
 
 
-    socket.on "isFull", (data, response) ->
-      responserooms.get(roomName).isFull()
+    socket.on "isFull", (roomName, response) ->
+      if rooms.has(roomName)
+        response rooms.get(roomName).isFull()
+      else
+        kick "Invalid room name"
 
 
     socket.on "join", (data, acknowledge) ->
-      utils.log "#{userName} joined"
       acknowledge socket.handshake.userName
-      roomName = socket.roomn = data.roomn.substring 1 #Remove hash from url
+      roomName = socket.roomn = data.roomn
+
+      utils.log "Attemping to join #{userName} to #{roomName}"
 
       return kick "Invalid room name" unless rooms.has(roomName)
       return kick "Room is full" if rooms.get(roomName).isFull()
@@ -198,11 +209,13 @@ arena.main = (io) ->
       socket.join roomName #Join this socket.io room
       io.in(roomName).emit "joined", {userName: userName} #Say he/she joined
 
+      socket.tryLeave = yes #Try to leave
+      utils.extraLog 'USER', "#{userName} joined #{roomName}", 'cyan'
+
       io.in(roomName).emit "start" if rooms.get(roomName).isFull()
 
 
     socket.on 'sevent', (event) -> #Ship event
-      console.log event
       user = rooms.get(roomName).getUser(userName)
       user.update new arena.Event(event), config.roomSize
       user.setDone()
@@ -214,6 +227,13 @@ arena.main = (io) ->
 
 
     socket.on "disconnect", ->
-      rooms.get(roomName).leaveUser userName #Leave the Room
-      socket.leave roomName # Leave socket.io room
-      io.in(roomName).emit "left", {userName: userName} # Say he/she left
+      utils.extraLog 'USER', "Kicked #{userName}", 'cyan'
+
+      # Do no try to leave a room with a kicked user
+      # TODO: Make a special case when the user is confirmed to have been in a room
+      if socket.tryleave
+        utils.extraLog 'USER', "#{userName} left", 'cyan'
+
+        rooms.get(roomName).leaveUser userName #Leave the Room
+        socket.leave roomName # Leave socket.io room
+        io.in(roomName).emit "left", {userName: userName} # Say he/she left

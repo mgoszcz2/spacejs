@@ -1,16 +1,23 @@
 colors = require('colors')
-utils = {}
-module.exports = utils
+module.exports = utils = {}
 
 #Try to log if error evals to true
 utils.tryLog = (err, msg) ->
-  if err
-    console.log "[#{process.pid}] (#{err}) #{msg}".red.bold
-    return false
-  true
+  utils.extraLog err, msg, 'red', yes if err
+  err is undefined
 
-utils.log = (msg) ->
-    console.log "[#{process.pid}] (LOG) #{msg}".green
+# Your general log
+utils.log = (msg) -> utils.extraLog 'LOG', msg, 'green'
+
+# Info log
+utils.infoLog = (msg) -> utils.extraLog 'INFO', msg, 'yellow'
+
+# Fully custom log
+utils.extraLog = (tag, msg, color = 'green', bold = no) ->
+  final = "(#{tag}) #{msg}"[color]
+  final = final.bold if bold
+
+  console.log final
 
 utils.argArray = (arg) ->
   [].slice.call arg
