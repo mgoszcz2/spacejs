@@ -18,9 +18,3 @@ utils.extraLog = (tag, msg, color = 'green', bold = no) ->
   final = final.bold if bold
 
   console.log final
-
-utils.argArray = (arg) ->
-  [].slice.call arg
-
-utils.iss = (str) ->
-  typeof str is 'string' or str instanceof String
