@@ -101,18 +101,18 @@ class arena.Room
     @users = {}
 
   # Rooms get user from room
-  getUser: (username) ->
-    @users[username]
+  getUser: (userName) ->
+    @users[userName]
 
   # Add a user to a room
-  addUser: (username, avatarSize) ->
+  addUser: (userName, avatarSize) ->
     # Each user gets their own unique copy
-    @users[username] = new arena.Userdata _.cloneDeep(@startPos[@count]), avatarSize
+    @users[userName] = new arena.Userdata _.cloneDeep(@startPos[@count]), avatarSize
     @count += 1
 
   # Make user leave the room
-  leaveUser: (username) ->
-    delete @users[username]
+  leaveUser: (userName) ->
+    delete @users[userName]
     @count -= 1
 
   # Check is room full
@@ -173,7 +173,7 @@ arena.main = (io) ->
 
   io.on "connection", (socket) ->
     roomName = socket.roomn #Ignore if not set we will re-set it anyway if so
-    username = socket.handshake.username
+    userName = socket.handshake.username #Change to camel case later
 
 
     kick = (str) ->
@@ -182,23 +182,28 @@ arena.main = (io) ->
       socket.disconnect()
 
 
+    socket.on "isFull", (data, response) ->
+      responserooms.get(roomName).isFull()
+
+
     socket.on "join", (data, acknowledge) ->
-      utils.log "#{username} joined"
-      acknowledge socket.handshake.username
+      utils.log "#{userName} joined"
+      acknowledge socket.handshake.userName
       roomName = socket.roomn = data.roomn.substring 1 #Remove hash from url
 
       return kick "Invalid room name" unless rooms.has(roomName)
       return kick "Room is full" if rooms.get(roomName).isFull()
 
-      rooms.get(roomName).addUser username, config.avatarSize #Join the Room
+      rooms.get(roomName).addUser userName, config.avatarSize #Join the Room
       socket.join roomName #Join this socket.io room
-      io.in(roomName).emit "joined", {username: username} #Say he/she joined
+      io.in(roomName).emit "joined", {userName: userName} #Say he/she joined
 
       io.in(roomName).emit "start" if rooms.get(roomName).isFull()
 
 
     socket.on 'sevent', (event) -> #Ship event
-      user = rooms.get(roomName).getUser(username)
+      console.log event
+      user = rooms.get(roomName).getUser(userName)
       user.update new arena.Event(event), config.roomSize
       user.setDone()
 
@@ -209,6 +214,6 @@ arena.main = (io) ->
 
 
     socket.on "disconnect", ->
-      rooms.get(roomName).leaveUser username #Leave the Room
+      rooms.get(roomName).leaveUser userName #Leave the Room
       socket.leave roomName # Leave socket.io room
-      io.in(roomName).emit "left", {username: username} # Say he/she left
+      io.in(roomName).emit "left", {userName: userName} # Say he/she left

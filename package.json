@@ -6,8 +6,9 @@
   "contributors": [],
 
   "scripts": {
-    "start": "./node_modules/coffee-script/bin/coffee src/app.coffee",
-    "test": "./node_modules/mocha/bin/mocha -R progress",
+    "start": "npm run-script make && ./node_modules/coffee-script/bin/coffee src/app.coffee",
+    "test": "./node_modules/mocha/bin/mocha -R progress && npm run-script cover",
+    "make": "./node_modules/coffee-script/bin/coffee -c src/public/js/",
     "cover": "./node_modules/mocha/bin/mocha -r blanket -R html-cov > coverage.html",
     "blanket": {
       "loader": "./node-loaders/coffee-script",
