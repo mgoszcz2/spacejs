@@ -25,11 +25,11 @@
     "passport": "~0.1.x",
     "passport-local": "~0.1.x",
     "socket.io": "~0.9.x",
-    "connect": "~2.8.x",
     "cookie": "~0.1.x",
     "coffee-script": "~1.6.3",
     "lodash": "~2.4.0",
-    "forever": "~0.10.10"
+    "forever": "~0.10.10",
+    "connect-redis": "~1.4.6"
   },
   "devDependencies": {
     "should": "~1.2.x",

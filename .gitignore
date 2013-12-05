@@ -3,3 +3,5 @@ npm-debug.log
 *~
 *.swp
 *.swo
+redis.log
+redis.rdb

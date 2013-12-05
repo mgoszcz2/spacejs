@@ -13,6 +13,9 @@ config.mode = 'development'
 #Port used by mongodb
 config.mongoPort = 1025
 
+# Port used by redis
+config.redisPort = 1026
+
 #Bcrypt encryption cost
 config.bcryptCost = 10
 

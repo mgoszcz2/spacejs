@@ -8,7 +8,9 @@ express = require 'express'
 colors = require 'colors'
 jade = require 'jade'
 socket = require 'socket.io'
-connect = require 'connect'
+
+#Persistant session store
+RedisStore = require('connect-redis') express #Read their README
 
 #Passport libs
 passport = require 'passport'
@@ -34,8 +36,10 @@ passport.deserializeUser (id, done) ->
 #Web server code
 app = express()
 
-#Akward stuff to make socket.io sessions work
-sessionStore = new connect.session.MemoryStore()
+#Akward stuff to make socket.io sessions work (and also persistant sessions)
+redisPref =
+  port: config.redisPort
+sessionStore = new RedisStore redisPref
 sessionPref =
   secret: secret
   key: sessionCookie
