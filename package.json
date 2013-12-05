@@ -5,7 +5,8 @@
   "description": "A hackable MMO game based in space",
   "contributors": [],
   "scripts": {
-    "start": "./node_modules/coffee-script/bin/coffee app.coffee"
+    "start": "./node_modules/coffee-script/bin/coffee app.coffee",
+    "test": "./node_modules/mocha/bin/mocha --compilers coffee:coffee-script -R progress"
   },
   "main": "./lib/http-server",
   "dependencies": {
@@ -19,7 +20,8 @@
     "socket.io": "~0.9.x",
     "connect": "~2.8.x",
     "cookie": "~0.1.x",
-    "coffee-script": "~1.6.3"
+    "coffee-script": "~1.6.3",
+    "lodash": "~2.4.0"
   },
   "devDependencies": {
     "should": "~1.2.x",

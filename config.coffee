@@ -37,11 +37,14 @@ config.roomSize = xy(900, 800)
 #Max robot move in pixels
 config.maxMove = 250
 
+# Size of the avatar
+config.avatarSize = xy 50, 50
+
 #Robot starting postions
 config.startPos = [
-  xy(50, 50)
-  xy(50, config.roomSize.y - 50)
-  xy(config.roomSize.x - 50, 50)
-  xy(config.roomSize.x - 50, config.roomSize.y - 50)
+  xy 50, 50
+  xy 50, config.roomSize.y - 50
+  xy config.roomSize.x - 50, 50
+  xy config.roomSize.x - 50, config.roomSize.y - 50
 ]
 module.exports = config

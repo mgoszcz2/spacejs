@@ -86,7 +86,7 @@ function handleData(data){
 
 $('#ready').click(function(){
   arena.emit('join', {'roomn': window.location.hash}, function(data){
-    user = data;  
+    user = data;
   });
   code = editor.getValue();
   localStorage.code = code;

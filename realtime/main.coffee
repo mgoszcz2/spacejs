@@ -21,7 +21,7 @@ module.exports = (io, sessionStore) ->
   ]
 
   #Pop of flashsocet if we can't use it
-  transports.pop 1  unless canUseFlash
+  transports.pop 1 unless canUseFlash
 
   #DAMN. It's explicit now - set this to false and waste hours debugging
   io.enable 'heartbeats'
@@ -57,4 +57,4 @@ module.exports = (io, sessionStore) ->
   require('./rooms') io.of('/rooms')
 
   #Spend ages debuging it - It still said ./rooms
-  require('./arena') io.of('/arena')
+  require('./arena').main io.of('/arena')

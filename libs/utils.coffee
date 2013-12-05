@@ -5,9 +5,12 @@ module.exports = utils
 #Try to log if error evals to true
 utils.tryLog = (err, msg) ->
   if err
-    console.log ('[' + process.pid + '] (' + err + ') ' + msg).red.bold
+    console.log "[#{process.pid}] (#{err}) #{msg}".red.bold
     return false
   true
+
+utils.log = (tag, msg) ->
+    console.log "[#{process.pid}] (#{tag}) #{msg}".green
 
 utils.argArray = (arg) ->
   [].slice.call arg
