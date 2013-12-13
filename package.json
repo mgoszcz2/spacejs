@@ -5,10 +5,6 @@
   "description": "A hackable MMO game based in space",
   "contributors": [],
   "scripts": {
-    "start": "npm run-script make && ./node_modules/coffee-script/bin/coffee src/app.coffee",
-    "test": "./node_modules/mocha/bin/mocha -R progress && npm run-script cover",
-    "make": "./node_modules/coffee-script/bin/coffee -c src/public/js/",
-    "cover": "./node_modules/mocha/bin/mocha -r blanket -R html-cov > coverage.html",
     "blanket": {
       "loader": "./node-loaders/coffee-script",
       "pattern": "src",
@@ -29,7 +25,8 @@
     "coffee-script": "~1.6.3",
     "lodash": "~2.4.0",
     "forever": "~0.10.10",
-    "connect-redis": "~1.4.6"
+    "connect-redis": "~1.4.6",
+    "connect": "~2.12.0"
   },
   "devDependencies": {
     "should": "~1.2.x",
