@@ -35,7 +35,7 @@ config.sessionCookie = 'sid'
 config.roomCache = 1000
 
 #Size of the room
-config.roomSize = xy(900, 800)
+config.roomSize = xy 900, 800
 
 #Max robot move in pixels
 config.maxMove = 250

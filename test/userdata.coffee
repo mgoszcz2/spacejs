@@ -56,6 +56,29 @@ describe 'Userdata', ->
       res.angle.should.equal 0
       res.hitWall.should.be.false
 
+    it 'should add turns together', ->
+      event = new arena.Event
+        turn: {value: 45}
+        move: {value: 1000}
+
+      res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
+      res.update event, testRoomSize
+      res.update event, testRoomSize
+      res = res.jsonify()
+
+      res.angle.should.equal 90
+
+    it 'should handle angle overflow', ->
+      event = new arena.Event
+        turn: {value: 180}
+        move: {value: 1000}
+
+      res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
+      res.update event, testRoomSize for i in [0..2]
+      res = res.jsonify()
+
+      res.angle.should.equal 180
+
   describe '#isDone, #setDone, #unsetDone', ->
     it 'should be not done by default', ->
       res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize

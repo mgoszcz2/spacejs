@@ -19,6 +19,9 @@ makeValidAngle = (angle) -> Math.abs(angle) % ROAUND_ANGLE
 # Check is something undefined
 isDef = (value) -> value isnt undefined
 
+# Check wether something is a nice number
+isNiceNumber = (num) -> _.isFinite(num) and _.isNumber(num)
+
 
 
 # Stores a new ship event (called sevent from scoket.io side)
@@ -29,14 +32,16 @@ class arena.Event
   #   move: {value: N}
   #   }
   constructor: (event) ->
-    @turn = event.turn.value if isDef(event.turn) and isDef(event.turn.value)
-    @move = event.move.value if isDef(event.move) and isDef(event.move.value)
+    # Close call: God knows what could have happend if event.turn.value wasn't
+    # a number
+    if isDef(event.turn) and isDef(event.turn.value) and isNiceNumber(event.turn.value)
+      @turn = event.turn.value
+    if isDef(event.move) and isDef(event.move.value) and isNiceNumber(event.move.value)
+      @move = event.move.value
 
   # Check wether properties exist
-  hasTurn: ->
-    @turn isnt null and isDef @turn
-  hasMove: ->
-    @move isnt null and isDef @move
+  hasTurn: -> isDef @turn
+  hasMove: -> isDef @move
 
   # Return properties
   getTurn: -> @turn
@@ -65,7 +70,7 @@ class arena.Userdata
 
   # Turn by 'turn'
   _turn: (turn) ->
-    @angle = makeValidAngle turn
+    @angle = makeValidAngle @angle + turn
 
   # Move dist far using current angle
   _move: (dist) ->
@@ -197,7 +202,7 @@ arena.main = (io) ->
 
 
     socket.on "join", (data, acknowledge) ->
-      acknowledge socket.handshake.userName
+      acknowledge userName
       roomName = socket.roomn = data.roomn
 
       utils.log "Attemping to join #{userName} to #{roomName}"
@@ -212,7 +217,9 @@ arena.main = (io) ->
       socket.tryLeave = yes #Try to leave
       utils.extraLog 'USER', "#{userName} joined #{roomName}", 'cyan'
 
-      io.in(roomName).emit "start" if rooms.get(roomName).isFull()
+      # Update is a like old 'start'
+      if rooms.get(roomName).isFull()
+        io.in(roomName).emit "update", rooms.get(socket.roomn).getAllUserData() 
 
 
     socket.on 'sevent', (event) -> #Ship event
