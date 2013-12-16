@@ -75,7 +75,7 @@ class arena.Userdata
   # Move dist far using current angle
   _move: (dist) ->
     realDist = if dist < maxMove and dist >= 0 then dist else maxMove
-    radAngle = @angle * (Math.PI / 180) #Make into radians
+    radAngle = makeValidAngle(@angle) * (Math.PI / 180) #Make into radians
     @position.x = (Math.sin(radAngle) * dist) + @position.x
     @position.y = (Math.cos(radAngle) * dist) + @position.y
 
@@ -205,20 +205,23 @@ arena.main = (io) ->
       acknowledge userName
       roomName = socket.roomn = data.roomn
 
-      utils.log "Attemping to join #{userName} to #{roomName}"
+      utils.log "#{userName} attempting to join #{roomName}"
 
       return kick "Invalid room name" unless rooms.has(roomName)
       return kick "Room is full" if rooms.get(roomName).isFull()
 
-      rooms.get(roomName).addUser userName, config.avatarSize #Join the Room
+      currentRoom = rooms.get(roomName)
+      currentRoom.addUser userName, config.avatarSize #Join the Room
       socket.join roomName #Join this socket.io room
       io.in(roomName).emit "joined", {userName: userName} #Say he/she joined
 
       socket.tryLeave = yes #Try to leave
-      utils.extraLog 'USER', "#{userName} joined #{roomName}", 'cyan'
+      joinedFraction = "#{currentRoom.getCount()}/#{currentRoom.getLimit()}"
+      utils.extraLog 'USER', "#{userName} joined #{roomName} (#{joinedFraction})", 'cyan'
 
       # Update is a like old 'start'
       if rooms.get(roomName).isFull()
+        utils.infoLog "Game in #{roomName} started!"
         io.in(roomName).emit "update", rooms.get(socket.roomn).getAllUserData() 
 
 

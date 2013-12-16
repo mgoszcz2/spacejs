@@ -43,9 +43,9 @@ module.exports = (app, passport) ->
     email = request.body.email
     if username and email and password and password2
       errors.misstype = true  unless password is password2
-      errors.badPass = true  unless /^[\w ]{6,}$/g.test(password)
-      errors.badName = true  unless /^[\w ]{2,32}$/g.test(username)
-      errors.badEmail = true  unless /^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g.test(email)
+      errors.badPass = true  unless /^[\w ]{6,}$/g.test(password) #Words and spaces min 6
+      errors.badName = true  unless /^\w{2,32}$/g.test(username) #Just words min 2, max 32
+      errors.badEmail = true  unless /^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g.test(email) #Email
       user.checkName username, (_hN) ->
         errors.hasName = _hN
         user.checkEmail email, (_hE) ->

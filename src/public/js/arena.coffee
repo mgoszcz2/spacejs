@@ -61,6 +61,10 @@ arena = io.connect 'http://localhost/arena', 'sync disconnect on unload': true
 # Queue singleton
 queue = new Queue
 
+# Has the game started yet
+started = no
+
+
 
 
 # jQuery selectors for common elements
@@ -79,6 +83,8 @@ $ ->
   arena.emit 'isFull', getRoomName(), (isFull) ->
     alert "Room is Full!" if isFull
 
+  $('footer').hide() # Hide the footer
+
 
 revalCode = (code) ->
   try
@@ -88,20 +94,12 @@ revalCode = (code) ->
 
 # Get room name
 getRoomName = -> window.location.hash.substring 1
+ROAUND_ANGLE = 360
+makeValidAngle = (angle) -> Math.abs(angle) % ROAUND_ANGLE
 
 
 
 
-
-# jQuery rotate plugin
-jQuery.fn.rotate = (degrees) ->
-  $(this).css
-    '-webkit-transform': 'rotate(' + degrees + 'deg)'
-    '-moz-transform': 'rotate(' + degrees + 'deg)'
-    '-ms-transform': 'rotate(' + degrees + 'deg)'
-    transform: 'rotate(' + degrees + 'deg)'
-
-  return this
 
 user = null
 
@@ -111,11 +109,11 @@ editor =
 
   prepareEditor: ->
     ed = editor.instance
-    ed.setTheme 'ace/theme/monokai'
-    ed.setHighlightActiveLine false
-    ed.setShowPrintMargin false
-    ed.getSession().setUseWorker false
+    ed.getSession().setUseWorker false #No lint
+    ed.setHighlightActiveLine true #Show current line
+    ed.renderer.setShowGutter false #No line numbers
     ed.getSession().setMode 'ace/mode/javascript'
+    ed.setTheme 'ace/theme/tomorrow'
     ed.insert(if localStorage.code then localStorage.code else '//Write your program here')
 
   getValue: ->
@@ -123,9 +121,9 @@ editor =
 
 
   disableEditor: ->
-    $(codeSelector).animate height: '0%', 500, ->
-      $(loggerSelector).animate height: '30%', 500, ->
-        log.log 'Logger started', 3
+    $(codeSelector).addClass 'height_hidden'
+    $(loggerSelector).removeClass 'height_hidden'
+    log.log 'Logger started', 3
 
 $('#ready').click ->
   arena.emit 'join',
@@ -162,23 +160,45 @@ arena.on 'no_room', (data) ->
 
 # Board changed
 arena.on 'update', (data) ->
-  $(arenaSelector).empty()
-
   for name, value of data
     iship = new Shipdata name, value
+
+    # If we are ourself capture the data onto the ship object
     if iship.getName() is user
       ship.angle = iship.getAngle()
       ship.hitWall = iship.hasHitWall()
       ship.position = iship.getPosition()
 
-    $('<div>',
-      class: 'robot'
-    ).css(
-      top: iship.getPosition().getY()
-      left: iship.getPosition().getX()
-    ).appendTo('#arena').rotate iship.getAngle()
+    # Just animate them
+    if started
+      $shipDiv = $(".#{iship.getName()}")
 
-  revalCode editor.getValue()
+      $shipDiv.animate(
+          top: iship.getPosition().getY()
+          left: iship.getPosition().getX()
+        , 300)
+
+      $(deg: $shipDiv.data('angle')).animate deg: iship.getAngle(),
+        duration: 300
+        step: (now) -> $shipDiv.css transform: "rotate(-#{now}deg)"
+
+      $shipDiv.data 'angle', makeValidAngle iship.getAngle()
+
+    # Just stating: create new divs
+    else
+      $('<div>', class: "robot #{iship.getName()}").css(
+        top: iship.getPosition().getY()
+        left: iship.getPosition().getX()
+        transform: "rotate(-#{iship.getAngle()}deg)"
+      ).appendTo('#arena').data 'angle', makeValidAngle iship.getAngle()
+
+  # Now that we are done, say we are started!
+  started = yes
+
+  # Wait for all the animations to finish
+  setTimeout(->
+      revalCode editor.getValue()
+    , 300)
 
 
 

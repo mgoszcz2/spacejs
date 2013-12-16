@@ -8,17 +8,18 @@ html(lang='en-GB')
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='/css/normalize.min.css')
     link(rel='stylesheet', href='/css/main.css')
-    link(href='http://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet', type='text/css')
+    //link(href='http://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet', type='text/css')
     block head
 
   body
     nav
-      a(href='/'): h1 space.js
+      a(href='/'): img(src='/img/logo.png')
       a(href='/spec') API
+      a(href='/rooms') Rooms
       section
         if username
-          span= username
           a(href='/logout.html') Logout
+          span= username
         else
           a(href='/login.html') Login
       div.clear
