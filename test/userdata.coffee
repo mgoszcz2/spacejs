@@ -1,6 +1,7 @@
 should = require 'should'
-arena = require '../src/realtime/arena'
 _ = require 'lodash'
+arena = require '../src/realtime/arena'
+config = require '../src/config'
 
 testStartPos =
   x: 50
@@ -79,6 +80,7 @@ describe 'Userdata', ->
 
       res.angle.should.equal 180
 
+
   describe '#isDone, #setDone, #unsetDone', ->
     it 'should be not done by default', ->
       res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
@@ -90,3 +92,21 @@ describe 'Userdata', ->
       res.isDone().should.equal yes
       res.unsetDone()
       res.isDone().should.equal no
+
+
+  describe '#getPosition', ->
+    it 'should return current position', ->
+      res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
+      res.getPosition().x.should.equal testStartPos.x
+      res.getPosition().y.should.equal testStartPos.y
+
+
+  describe '#isDead, #handleHit', ->
+    it 'should return no by default', ->
+      res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
+      res.isDead().should.be.false
+
+    it 'should be yes if live is depleated', ->
+      res = new arena.Userdata _.cloneDeep(testStartPos), testAvatarSize
+      res.handleHit 'bullet' for i in [0...config.defaultLive / config.hitValues.bullet]
+      res.isDead().should.be.true

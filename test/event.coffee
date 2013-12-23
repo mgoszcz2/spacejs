@@ -37,6 +37,21 @@ describe 'Event', ->
       res = new arena.Event {move: {value: 0}}
       res.hasMove().should.be.true
 
+
+  describe '#hasFire', ->
+    it 'should return false if data wrong', ->
+      res1 = new arena.Event {}
+      res2 = new arena.Event {fire: {}}
+      res1.hasFire().should.be.false
+      res2.hasFire().should.be.false
+
+    it 'should return true', ->
+      res = new arena.Event {fire: {value: 0}}
+      res.hasFire().should.be.true
+
+
+
+
   describe '#getTurn', ->
     it 'should return the turn', ->
       res = new arena.Event {turn: {value: 42}}

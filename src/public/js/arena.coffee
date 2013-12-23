@@ -20,10 +20,11 @@ class Position
 
 
 # Single unit of data
-class Shipdata
-  constructor: (@name, @data) ->
+class Entitydata
+  constructor: (@data) ->
     @position = new Position @data.pos
-  getName: -> @name
+  getName: -> @data.name
+  getType: -> @data.type
   getAngle: -> @data.angle
   getPosition: -> @position
   hasHitWall: -> @data.hitWall #TODO: We could do this on the client side
@@ -34,29 +35,39 @@ class Shipdata
 # Keep track of current turn
 class Queue
   constructor: ->
-    @_turn = 0
-    @_move = 0
+    @_turn = null
+    @_move = null
+    @_fire = null
 
   reset: ->
-    @_turn = 0
-    @_move = 0
+    @_turn = null
+    @_move = null
+    @_fire = null
 
-  resetTurn: -> @_turn = 0
+  resetTurn: -> @_turn = null
 
   turn: (deg) -> @_turn += deg
   move: (steps) -> @_move += steps
+  fire: (deg) -> @_fire = deg
 
   jsonify: ->
-    {
-    move: {value: @_move}
-    turn: {value: @_turn}
-    }
+    data = {}
+    data.move = value: @_move if @_move?
+    data.fire = value: @_fire if @_fire?
+    data.turn = value: @_turn if @_turn?
+    console.log this, data
+    return data
 
 
 
+
+# Polyfill for window.location.origin support
+unless window.location.origin?
+  window.location.origin = "#{window.location.protocol}//#{window.location.hostname}"
+  window.location.origin += ":#{window.location.host}" if window.location.host
 
 # Try to send disconnect signal on unload
-arena = io.connect 'http://localhost/arena', 'sync disconnect on unload': true
+arena = io.connect "#{window.location.origin}/arena", 'sync disconnect on unload': true
 
 # Queue singleton
 queue = new Queue
@@ -153,44 +164,54 @@ arena.on 'joined', (data) ->
 arena.on 'left', (data) ->
   log.log "#{data} left", 3
 
+
+
+
 # Make this nicer
 arena.on 'no_room', (data) ->
   console.log data, 2
   window.location.pathname = '/rooms.html'
 
+
+animateEnitytDiv = (entity) ->
+  $entityDiv = $(".#{entity.getName()}")
+
+  return addEntityDiv entity if $entityDiv.length is 0
+
+  $entityDiv.animate(
+      top: entity.getPosition().getY()
+      left: entity.getPosition().getX()
+    , 300)
+
+  $(deg: $entityDiv.data('angle')).animate deg: entity.getAngle(),
+    duration: 300
+    step: (now) -> $entityDiv.css transform: "rotate(-#{now}deg)"
+
+  $entityDiv.data 'angle', makeValidAngle entity.getAngle()
+
+addEntityDiv = (entity) ->
+  $('<div>', class: "#{entity.getType()} #{entity.getName()}").css(
+    top: entity.getPosition().getY()
+    left: entity.getPosition().getX()
+    transform: "rotate(-#{entity.getAngle()}deg)"
+  ).appendTo('#arena').data 'angle', makeValidAngle entity.getAngle()
+
+
+
+
 # Board changed
 arena.on 'update', (data) ->
-  for name, value of data
-    iship = new Shipdata name, value
+  for entity in data
+    entity = new Entitydata entity
 
     # If we are ourself capture the data onto the ship object
-    if iship.getName() is user
-      ship.angle = iship.getAngle()
-      ship.hitWall = iship.hasHitWall()
-      ship.position = iship.getPosition()
+    if entity.getType() is 'ship' and entity.getName() is user
+      ship.angle = entity.getAngle()
+      ship.hitWall = entity.hasHitWall()
+      ship.position = entity.getPosition()
 
-    # Just animate them
-    if started
-      $shipDiv = $(".#{iship.getName()}")
-
-      $shipDiv.animate(
-          top: iship.getPosition().getY()
-          left: iship.getPosition().getX()
-        , 300)
-
-      $(deg: $shipDiv.data('angle')).animate deg: iship.getAngle(),
-        duration: 300
-        step: (now) -> $shipDiv.css transform: "rotate(-#{now}deg)"
-
-      $shipDiv.data 'angle', makeValidAngle iship.getAngle()
-
-    # Just stating: create new divs
-    else
-      $('<div>', class: "robot #{iship.getName()}").css(
-        top: iship.getPosition().getY()
-        left: iship.getPosition().getX()
-        transform: "rotate(-#{iship.getAngle()}deg)"
-      ).appendTo('#arena').data 'angle', makeValidAngle iship.getAngle()
+    if started then animateEnitytDiv entity
+    else addEntityDiv entity
 
   # Now that we are done, say we are started!
   started = yes
@@ -228,8 +249,9 @@ utils =
 
 # Gun controll
 gun =
-  fire: -> null
-  turn: -> null
+  angle: 0
+  fire: -> queue.fire gun.angle
+  turn: (num) -> gun.angle = num
 
 
 # Main event loop

@@ -11,8 +11,8 @@ testStartPos = [{
   y: 50
 }]
 testRoomSize =
-  x: 100
-  y: 100
+  x: 200
+  y: 200
 testUsernames = [
   "Jack",
   "Jil"
@@ -132,18 +132,36 @@ describe 'Room', ->
 
       res.isFull().should.be.true
 
+
   describe '#getAllUserData', ->
     it 'should return data', ->
       res = new arena.Room testLimit, testRoomSize, testStartPos
-      res.should.be.an.Object
+      res.getAllUserData().should.be.an.Object
 
     it 'should contains parsable data', ->
       res = new arena.Room testLimit, testRoomSize, testStartPos
       res.addUser testUsernames[0], testAvatarSize
-      res = res.getAllUserData()[testUsernames[0]]
+      res = res.getAllUserData()[0]
 
       res.angle.should.an.Number
       res.hitWall.should.be.an.Boolean
       res.pos.should.be.an.Object
       res.pos.y.should.be.an.Number
       res.pos.x.should.be.an.Number
+
+
+  describe '#addBullet', ->
+    it 'should add bullet', ->
+      res = new arena.Room testLimit, testRoomSize, testStartPos
+      res.addBullet new arena.Bullet testUsernames[0], testStartPos[0], 0
+      res.bullets.length.should.equal 1
+
+
+  describe '#updateBullets', ->
+    it 'should update bullet position', ->
+      res = new arena.Room testLimit, testRoomSize, testStartPos
+      res.addBullet new arena.Bullet testUsernames[0], testStartPos[0], 0
+      res.updateBullets() for i in [0..2]
+      res.bullets.length.should.equal 0
+
+    #TODO: Add more tests

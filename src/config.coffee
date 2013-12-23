@@ -38,10 +38,23 @@ config.roomCache = 1000
 config.roomSize = xy 300, 300
 
 #Max robot move in pixels
-config.maxMove = 250
+config.maxMove = 10
 
 # Size of the avatar
 config.avatarSize = xy 50, 50
+
+# Default turn/time span for a bullet (-1 for Inf)
+config.turnSpan = -1
+
+# Distance for bullets to move each turn (preferable same as config.maxMove)
+config.bulletMaxMove = config.maxMove
+
+#Default life for a user
+config.defaultLive = 100
+
+#Userdata hit values
+config.hitValues =
+  bullet: 20
 
 #Robot starting postions
 config.startPos = [

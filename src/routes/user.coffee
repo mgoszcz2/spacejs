@@ -25,7 +25,7 @@ module.exports = (app, passport) ->
 
     ) request, response, next
 
-  
+
   #Server side verification of login - errors store error states which get
   #    toggled during error checking
   app.post '/register.html', helpers.ensureNew('/rooms.html'), (request, response) ->
@@ -42,18 +42,18 @@ module.exports = (app, passport) ->
     password2 = request.body.password2
     email = request.body.email
     if username and email and password and password2
-      errors.misstype = true  unless password is password2
-      errors.badPass = true  unless /^[\w ]{6,}$/g.test(password) #Words and spaces min 6
-      errors.badName = true  unless /^\w{2,32}$/g.test(username) #Just words min 2, max 32
-      errors.badEmail = true  unless /^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g.test(email) #Email
+      errors.misstype = true unless password is password2
+      errors.badPass = true unless /^[\w ]{6,}$/g.test(password) #Words and spaces min 6
+      errors.badName = true unless /^\w{2,32}$/g.test(username) #Just words min 2, max 32
+      errors.badEmail = true unless /^([a-z0-9_\.\+-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g.test(email) #Email
       user.checkName username, (_hN) ->
         errors.hasName = _hN
         user.checkEmail email, (_hE) ->
           errors.hasEmail = _hE
-          
+
           #We validated the shit out of registration data - make decision
           if errors.misstype or errors.hasEmail or errors.hasName or errors.badName or errors.badEmail or errors.badPass
-            
+
             #Add additional data to error data to help out register
             #              form to be user friendly
             errors.error = true
