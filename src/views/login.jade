@@ -7,16 +7,13 @@ block body
     if error
         b Wrong username or password
 
-    article
+    .centred: .grouper
+      h2 Login
       form(method='post', action='login.html')
           label(for='id') Username/Email 
-          br
           input(name='id', type='text')
-          br
 
           label(for='password') Password 
-          br
           input(name='password', type='password')
-          br
 
-          input(type='submit', value='Login')
+          input(type='submit', value='Login').button.action

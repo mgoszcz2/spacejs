@@ -8,13 +8,15 @@ html(lang='en-GB')
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='/css/normalize.min.css')
     link(rel='stylesheet', href='/css/main.css')
+    //TODO: Elimate this later - reminder of before I used stylus
+    link(rel='stylesheet', href='/css/common.css')
     //link(href='http://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet', type='text/css')
     block head
 
   body
     nav
       a(href='/'): img(src='/img/logo.png')
-      a(href='/spec') API
+      a(href='/spec.html') API
       a(href='/rooms.html') Rooms
       section
         if username
@@ -26,7 +28,7 @@ html(lang='en-GB')
 
     block body
 
-    footer Copyright @ Maciej Goszczycki (mgoszcz2)
+    footer.centred-wide-text Copyright @ Maciej Goszczycki (mgoszcz2)
 
     script(src='/js/vendor/html5shiv.js')
     script(src='/js/vendor/jquery-1.10.2.min.js')

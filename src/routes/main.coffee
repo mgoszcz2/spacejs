@@ -9,6 +9,6 @@ module.exports = (app) ->
   app.get '/', helpers.ensureNew('/rooms.html'), (request, response) ->
     response.render 'index'
 
-  app.get '/spec', (request, response) ->
+  app.get '/spec.html', (request, response) ->
     response.render 'spec'
 

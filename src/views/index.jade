@@ -1,20 +1,23 @@
 extends templates/base
+include mixins/editor
 
 block head
     title space.js - A javascript hackable MMO game
 
 block body
-  article
-    form(method='post', action='login.html')
-      input(name='id', type='text', placeholder='Username or email')
-      input(name='password', type='password', placeholder='Password')
-      input(type='submit', value='Login')
-    p A hackable MMO game based in space. Made by mgoszcz2
-    a(href='register.html') Register
+  +editor()
 
-  div#code
-
+  .dialog
+    .banner: h2.quote Program spaceships, compete to learn new skills and test them
+    .content: .neutral
+      p
+        | Program spaceships in JavaScript or CoffeeScript (more languages coming soon).
+        | Then fight agains other players in Robocode style with seamless (eventually...)
+        | on-line experience.
+      a(href='register.html').action.button.half-size Register
+      a(href='login.html').action.button.half-size Login
 
 block script
+  script(src='/socket.io/socket.io.js')
   script(src='/js/vendor/ace/ace.js')
-  script(src='/js/index.js')
+  script(src='/js/arena.js')

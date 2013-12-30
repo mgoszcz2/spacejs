@@ -1,0 +1,152 @@
+@import 'vars/common.styl'
+
+starred-image-path = '/img/star_bg.png'
+starred-background(color)
+    background: color url(starred-image-path) !important
+
+
+
+
+// A dialog element
+/* Any paragraphs in .contwent have only bottom margin */
+.dialog
+  background: back-color
+  position: absolute
+  margin: 0 auto
+  top: 100px
+  left: 0
+  right: 0
+  display: inline-block
+  z-index: 999
+  width: 50%
+  outline: 9999px solid rgba(0,0,0,0.5)
+
+  .banner
+    background: branding-color
+    color: bright-text-color
+    padding: resonable-margin
+    text-align: center
+    box-shadow: inset 0 -10px 20px 0px rgba(0, 0, 0, 0.3);
+
+    h2
+      margin: 0 !important
+
+  .content
+    padding: resonable-margin
+
+    p
+      margin 0 0 1em
+
+
+
+
+// Quote element
+.quote
+  font-style: italic
+
+  &:before
+    content: '“'
+  &:after
+    content: '”'
+
+
+
+
+// Your standar issue button
+/* Only assumes border-radius and that the background should be dark */
+.button
+  border-radius: resonable-radius
+  text-decoration: none
+  color: bright-text-color
+  transition: background-color 0.3s ease
+  display: inline-block
+  text-align: center
+  border: 0
+  outline: 0
+  padding: 10px
+
+  *
+    text-decoration: none
+    color: bright-text-color
+
+
+
+
+// An ACTION! button
+/* A sub-class of .button */
+.action
+  background: action-color
+
+  &:hover
+    background: lighten(action-color, 10%)
+    text-shadow: 0 0 10px rgba(255,255,255,1)
+
+
+
+
+// 2x Takes half the size
+/* Two next to each other have space in the middle */
+half-size-spacing = 5
+.half-size
+  width: 50% - half-size-spacing
+
+  + .half-size
+    float: right;
+
+
+
+
+// Div swiss army knife
+.neutral
+  clear: both
+
+
+
+// This div has starred background
+.starred
+  starred-background: branding-color
+
+
+
+// Center what-ever is inside the div
+.centred
+  text-align: center
+
+  > *
+    display inline-block
+    text-align: initial
+
+.centred-wide-text
+  width: 100%
+  text-align: center
+
+
+// Before was located in the forms.styl
+form
+  background-color: light-accent-color
+  padding: resonable-margin
+  text-align: initial
+
+  input
+    display: block
+
+  input[type='text'], input[type='password']
+    margin-bottom: 1em
+    outline: 0
+    border: 1px solid darken(light-accent-color, 10%)
+    padding: 5px
+    border-radius: resonable-radius
+
+  label
+    font-style: italic
+
+  // Button class extension
+  input[type='submit']
+    margin: 0 auto
+
+
+// Group elements together
+/* Has a resonable margin and text is centred */
+.grouper
+  margin: resonable-margin
+  text-align: center

@@ -1,14 +1,11 @@
 extends templates/base
+include mixins/editor
 
 block head
   title space.js - Play
 
 block body
-  #wrap
-    #code
-    #logger.height_hidden
-    button#ready Ready!
-    #arena_wrap: #arena
+  +editor()
 
 block script
   script(src='/socket.io/socket.io.js')
