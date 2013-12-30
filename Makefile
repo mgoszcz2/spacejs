@@ -1,6 +1,7 @@
 COFFEEC=./node_modules/coffee-script/bin/coffee -m -c #Compile
 OCOFFEEC=../../../node_modules/coffee-script/bin/coffee -m -c #Other one for client side
 MOCHA=./node_modules/mocha/bin/mocha
+STYLUS=./node_modules/stylus/bin/stylus --include-css > /dev/null
 
 .PHONY: default clean start test coverage show_test debug debug_brk
 
@@ -15,17 +16,19 @@ default:
 	# Special case for Client side sripts to correct source maps paths
 
 	cd ./src/public/js/ && $(OCOFFEEC) arena.coffee
+	$(STYLUS) ./src/public/css/*.styl
 
 clean:
-	rm -fv ./src/*.map          ./src/*.js
-	rm -fv ./src/models/*.map   ./src/models/*.js
-	rm -fv ./src/libs/*.map     ./src/libs/*.js
-	rm -fv ./src/realtime/*.map ./src/realtime/*.js
-	rm -fv ./src/routes/*.map   ./src/routes/*.js
 	rm -fv ./src/public/js/arena.{js,map}
+	rm -fv ./src/*.{js,map}
+	rm -fv ./src/models/*.{js,map}
+	rm -fv ./src/libs/*.{js,map}
+	rm -fv ./src/realtime/*.{js,map}
+	rm -fv ./src/routes/*.{js,map}
+	rm -fv ./src/public/css/*.css
 
 start:
-	node src/app.js
+	@node src/app.js
 
 debug:
 	node --debug src/app.js
