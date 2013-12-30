@@ -63,7 +63,7 @@ app.use app.router #Make sure routes do their thing. See http://stackoverflow.co
 app.use express.static "#{__dirname}/public" #Use public as the static dir
 
 #WTF! socket.io website is all wrong - https://github.com/LearnBoost/socket.io/issues/941
-io = socket.listen app.listen port
+io = socket.listen app.listen(port), log: config.ioLogEnabled
 
 #Socket.io configuration
 (require './realtime/main') io, sessionStore, secret

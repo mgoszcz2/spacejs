@@ -1,73 +1,52 @@
-#External libs
+hashPassword = (password) ->
+  bc.hashSync password, config.bcryptCost
 
-#Local libs
+#Prep libs
+bc = require 'bcrypt'
+utils = require '../libs/utils'
+config = require '../config'
+Mongolian = require 'mongolian'
+
 
 #Mongolian set up
-
-#Exports
-
-#Check if user with following username exists
-
-#Check if user with following email exists
-
-#Check whether user exists with an id
-
-#ObjectId takes in hex string and is a constructor
-
-#Get username by their id and password,
-#rewritten for passport.js localStrategy callback format
-#Auth success
-hashPassword = (password) ->
-  bc.hashSync password, bcryptCost
-bc = require('bcrypt')
-utils = require('../libs/utils')
-config = require('../config')
-mongoPort = config.mongoPort
-bcryptCost = config.bcryptCost
-Mongolian = require('mongolian')
-ObjectId = Mongolian.ObjectId
-server = new Mongolian('127.0.0.1:' + mongoPort,
+server = new Mongolian('127.0.0.1:' + config.mongoPort,
   log: new Object()
 )
-db = server.db('master')
-users = db.collection('users')
+db = server.db 'master'
+users = db.collection 'users'
+
+
+#Exports
 user = {}
 module.exports = user
+
+
+#Check if user with following username exists
 user.checkName = (name, callback) ->
-  users.findOne
-    username: name
-  , (err, user) ->
+  users.findOne username: name, (err, user) ->
     utils.tryLog err, 'models/user.checkName'
     callback (if user then true else false)
 
 
+#Check if user with following email exists
 user.checkEmail = (email, callback) ->
-  users.findOne
-    email: email
-  , (err, user) ->
+  users.findOne email: email, (err, user) ->
     utils.tryLog err, 'models/user.checkEmail'
     callback (if user then true else false)
 
 
+#Check whether user exists with an id
 user.getId = (id, callback) ->
-  users.findOne
-    _id: new ObjectId(id)
-  , (err, user) ->
+  users.findOne _id: new Mongolian.ObjectId(id), (err, user) ->
     utils.tryLog err, 'models/user.getId'
     callback user
 
 
+#Get username by their id and password,
+#rewritten for passport.js localStrategy callback format
+#Auth success
 user.login = (id, password, callback) ->
-  users.findOne
-    $or: [
-      {
-        email: id
-      }
-      {
-        username: id
-      }
-    ]
-  , (err, user) ->
+  users.findOne $or: [{email: id}, {username: id}], (err, user) ->
     utils.tryLog err, 'models/users.login'
     unless user
       callback null, false
@@ -77,9 +56,9 @@ user.login = (id, password, callback) ->
       callback null, false
 
 
+# Register a new user
 user.register = (username, email, password) ->
   users.save
     username: username
     email: email
     password: hashPassword(password)
-

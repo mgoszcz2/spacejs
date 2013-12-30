@@ -168,8 +168,8 @@ arena.on 'left', (data) ->
 
 
 # Make this nicer
-arena.on 'no_room', (data) ->
-  console.log data, 2
+arena.on 'kick', (data) ->
+  alert data
   window.location.pathname = '/rooms.html'
 
 

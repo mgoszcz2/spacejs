@@ -11,20 +11,16 @@ default:
 	$(COFFEEC) ./src/libs/*.coffee
 	$(COFFEEC) ./src/realtime/*.coffee
 	$(COFFEEC) ./src/routes/*.coffee
-
-	# I will make this more general later
-	# Special case for Client side sripts to correct source maps paths
-
-	cd ./src/public/js/ && $(OCOFFEEC) arena.coffee
+	cd ./src/public/js/ && $(OCOFFEEC) *.coffee
 	$(STYLUS) ./src/public/css/*.styl
 
 clean:
-	rm -fv ./src/public/js/arena.{js,map}
 	rm -fv ./src/*.{js,map}
 	rm -fv ./src/models/*.{js,map}
 	rm -fv ./src/libs/*.{js,map}
 	rm -fv ./src/realtime/*.{js,map}
 	rm -fv ./src/routes/*.{js,map}
+	rm -fv ./src/public/js/*.{js,map}
 	rm -fv ./src/public/css/*.css
 
 start:

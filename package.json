@@ -2,8 +2,6 @@
   "name": "Game",
   "version": "0.0.0",
   "author": "mgoszcz2",
-  "description": "A hackable MMO game based in space",
-  "contributors": [],
   "scripts": {
     "blanket": {
       "loader": "./node-loaders/coffee-script",
@@ -11,7 +9,6 @@
       "data-cover-never": "node_modules"
     }
   },
-  "main": "./lib/http-server",
   "dependencies": {
     "colors": "~0.6.x",
     "express": "~3.3.x",
@@ -26,7 +23,8 @@
     "lodash": "~2.4.0",
     "forever": "~0.10.10",
     "connect-redis": "~1.4.6",
-    "connect": "~2.12.0"
+    "connect": "~2.12.0",
+    "stylus": "~0.41.3"
   },
   "devDependencies": {
     "should": "~1.2.x",
@@ -34,9 +32,5 @@
     "request": "~2.27.x",
     "blanket": "~1.1.5"
   },
-  "bundledDependencies": [],
-  "license": "Closed source",
-  "engines": {
-    "node": ">=0.10.13"
-  }
+  "license": "GPL"
 }

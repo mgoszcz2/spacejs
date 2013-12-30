@@ -22,17 +22,17 @@ config.bcryptCost = 10
 #Socket.IO log level
 config.ioLogLevel = 1
 
+#Should Socket.IO log anything
+config.ioLogEnabled = no
+
 #Can Socket.IO use flash
-config.canUseFlash = true
+config.canUseFlash = no
 
 #Session secret
 config.secret = 'hello world is the secret'
 
 #Session cookie name
 config.sessionCookie = 'sid'
-
-#Room cache time, ms
-config.roomCache = 1000
 
 #Size of the room
 config.roomSize = xy 300, 300
