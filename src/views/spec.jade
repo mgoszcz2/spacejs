@@ -71,7 +71,7 @@ block body
 
       h3.function ship.hitWall
       p.description
-        | A variable that show weather the ship is currently next to a wall
+        | A variable that shows weather the ship is currently next to a wall
         code: pre
           | //Code assumes a really small arena size of 20steps
           | on('turn', function(){
@@ -145,7 +145,7 @@ block body
         | Example:
         |   The ship.angle equals 90deg
         |   You want to turn to 290deg
-        |   You execute ship.turn(utils.makeRelative(290)) //Make realtive returns 560 and turns ship to 290deg
+        |   You execute ship.turn(utils.makeRelative(290)) //makeRelative() returns 560 and turns the ship to 290deg
         code: pre
           | on('turn', function(){
           |   utils.print({a: 2}) //Prints {a: 2}
@@ -155,7 +155,7 @@ block body
 
       h3.function utils.getAngle(A, B)
       p.description
-        | Get the angle between tow Position objects
+        | Get the angle between two Position objects
         code: pre
           | on('turn', function(){
           |   // Moves to first found object
