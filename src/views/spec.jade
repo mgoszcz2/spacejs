@@ -2,32 +2,178 @@ extends templates/base
 
 block head
   title space.js - API
+  link(rel='stylesheet', href='/js/vendor/highlight/styles/tomorrow.css')
+  script(src='/js/vendor/highlight/highlight.min.js')
+  script hljs.initHighlightingOnLoad();
 
 block body
-  h1 API 
-  h2 radar.scan()
-  | Returns an array of all ships in the arena
-  h2 ship.ready()
-  | Call when you finished your move
-  h2 ship.turnBy([N])
-  | Turn by N degrees relatively
-  h2 ship.turn([N])
-  | turn N degrees
-  h2 ship.move([N])
-  | Move N steps forward
-  h2 ship.hitWall()
-  | Has a robot hit wall
-  h2 utils.print(str)
-  | Print a object
-  h2 utils.makeRelative(N)
-  | Make absolute angle relative
-  h2 uitls.getAngle(A, B)
-  | Get get angle between two points
-  h2 utils.getDist(A, B)
-  | Get distance beetwen two points
-  h1 Not yet implemented
-  h2 gun.turn
-  h2 gun.fire
+  .api-listing
+    h2.topic radar
+
+    .api
+      h3.function radar.scan()
+      p.description
+        | Returns an Array of Objects representing all entities on the arena in the following format
+        code: pre
+          | [{
+          |   name: Name of entity
+          |   type: Right now 'bullet' or 'ship'
+          |   pos: {
+          |     x: X coordinate
+          |     y: Y coordinate
+          |   }
+          | }, ...]
+
+    h2.topic ship
+
+    .api
+      h3.function ship.ready()
+      p.description
+        | A compulsory function that tells the server that your turn is finished.
+        code: pre
+          | on('turn', function(){
+          |   ship.ready();
+          | });
+
+      h3.function ship.turn(N)
+      p.description
+        | Turn by 'N' degrees. Calling it again overrides the previous set value for current turn.
+        | Minus values are not allowed (BUG!) but you can use values greater than 360 like so:
+        | You want to turn -20deg you turn 360deg + 20deg
+        code: pre
+          | on('turn', function(){
+          |   ship.turn(20);
+          |   ship.turn(10);
+          |   ship.ready(); //The ship will turn by 10deg
+          | });
+
+
+      h3.function ship.turnBy(N)
+      p.description
+        | Turn by 'N' degrees. Calling it again adds the new value to the previous one.
+        code: pre
+          | on('turn', function(){
+          |   ship.turn(20); //You could also use ship.turnBy(20)
+          |   ship.turnBy(10);
+          |   ship.ready(); //The ship will turn by 30deg
+          | });
+
+      h3.function ship.move(N)
+      p.description
+        | Move 'N' steps (a.k.a pixels) Calling it again adds the new value to the previous one.
+        | The move happens after the rotation.
+        code: pre
+          | on('turn', function(){
+          |   ship.move(20); //You could also use ship.turnBy(20)
+          |   ship.moveBy(10);
+          |   ship.ready(); //The ship will turn by 30deg
+          | });
+
+      h3.function ship.hitWall
+      p.description
+        | A variable that show weather the ship is currently next to a wall
+        code: pre
+          | //Code assumes a really small arena size of 20steps
+          | on('turn', function(){
+          |   ship.move(20);
+          |   if (ship.hitWall) {
+          |     ship.turn(180); //Turn around.
+          |   }
+          |   ship.ready(); //The ship will turn by 30deg
+          | });
+
+      h3.function ship.angle
+      p.description
+        | Current angle the ship is at
+        code: pre
+          | on('turn', function(){
+          |   gun.turn(ship.angle);
+          |   gun.fire(); //Fires in the direction the ship was facing during the turn
+          |   ship.ready();
+          | });
+
+      h3.function ship.position
+      p.description
+        | Returns a Position object of where the ship is (see Position object for details)
+        code: pre
+          | on('turn', function(){
+          |   utils.print("Current X" + ship.position.getX());
+          |   ship.ready();
+          | });
+
+    h2.topic gun
+
+    .api
+      h3.function gun.turn(N)
+      p.description
+        | Turn a gun to an absolute position.
+        code: pre
+          | //Code assumes a really small arena size of 20steps
+          | on('turn', function(){
+          |   gun.turn(20);
+          |   ship.ready(); //The gun doesn't yet fire. (see next function)
+          | });
+
+      h3.function gun.fire()
+      p.description
+        | Fire a bullet in the last position the gun was turned to. The default direction is 0
+        code: pre
+          | on('start', function(){
+          |   gun.turn(20);
+          | });
+          | on('turn', function(){
+          |   gun.fire(); //Fire the gun at last direction
+          |   ship.ready();
+          | });
+
+    h2.topic utils
+
+    .api
+      h3.function utils.print(object | string)
+      p.description
+        | Prints a jsonified object or a string to the log window on the left
+        code: pre
+          | on('turn', function(){
+          |   utils.print({a: 2}) //Prints {a: 2}
+          |   utils.print("42") //Prints 42
+          |   ship.ready();
+          | });
+
+      h3.function utils.makeRelative(N)
+      p.description
+        | Make an absolute angle like 45* degrees relative to the current ship so it can be used in ship.turn()
+        | Example:
+        |   The ship.angle equals 90deg
+        |   You want to turn to 290deg
+        |   You execute ship.turn(utils.makeRelative(290)) //Make realtive returns 560 and turns ship to 290deg
+        code: pre
+          | on('turn', function(){
+          |   utils.print({a: 2}) //Prints {a: 2}
+          |   utils.print("42") //Prints 42
+          |   ship.ready();
+          | });
+
+      h3.function utils.getAngle(A, B)
+      p.description
+        | Get the angle between tow Position objects
+        code: pre
+          | on('turn', function(){
+          |   // Moves to first found object
+          |   angle = utils.getAngle(ship.position, new Position(radar.scan()[0].pos));
+          |   ship.turn(utils.makeRelative(angle))
+          |   ship.move(10);
+          |   ship.ready();
+          | });
+
+      h3.function utils.getDistance(A, B)
+      p.description
+        | Get the distance between points A and B
+        code: pre
+          | on('turn', function(){
+          |   dist = utils.getDistance(ship.position, new Position(radar.scan()[0].pos));
+          |   utils.print("Distance to first object: " + dist);
+          |   ship.ready();
+          | });
 
 block script
   script(src='/socket.io/socket.io.js')

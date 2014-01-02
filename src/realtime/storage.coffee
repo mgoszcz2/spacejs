@@ -263,20 +263,22 @@ class storage.Room
 
   # Return nice JSON ready data for radar
   getAllUserData: ->
-    data = []
+    data =
+      zombie: []
+      update: []
 
     for name, userdata of @users
       userdata = userdata.jsonify()
       userdata.type = 'ship'
       userdata.name = name
-      data.push userdata
+      data.update.push userdata
 
     for bullet in @bullets
       bullet = bullet.jsonify()
       bullet.type = 'bullet'
       #Dash is not in valid username regex: /^\w{2,32}$/g
       bullet.name = "-bullet-#{bullet.id}"
-      data.push bullet
+      data.update.push bullet
 
     # 'zombie-bullet' entity! show bullet's to be deleted
     # Thanks. Alice Barrett for the suggesestion
@@ -285,7 +287,7 @@ class storage.Room
       bullet.type = 'zombie-bullet'
       # Name stays the same so it can be removed
       bullet.name = "-bullet-#{bullet.id}"
-      data.push bullet
+      data.zombie.push bullet
 
     return data
 

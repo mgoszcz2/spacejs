@@ -10,13 +10,13 @@ block body
     .centred: .grouper
       h2 Register
       form(method='post', action='register.html')
-        label(for='username') Name
+        label(for='username') Name (Using A-z and _, 2-32 letters)
         input(name='username', type='text', value=username)
 
-        label(for='email') Email
+        label(for='email') Email (Valid)
         input(name='email', type='text', value=email)
 
-        label(for='password') Password
+        label(for='password') Password (Using A-z and _, minimum 6 letters)
         input(name='password', type='password', value=password)
 
         label(for='password2') Retype password

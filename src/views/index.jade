@@ -1,5 +1,6 @@
 extends templates/base
 include mixins/editor
+include mixins/alpha
 
 block head
     title space.js - A javascript hackable MMO game
@@ -11,9 +12,12 @@ block body
     .banner: h2.quote Program spaceships, compete to learn new skills and test them
     .content: .neutral
       p
-        | Program spaceships in JavaScript or CoffeeScript (more languages coming soon).
-        | Then fight agains other players in Robocode style with seamless (eventually...)
+        | Program spaceships in JavaScript or
+        strike CoffeeScript
+        |  (more languages coming soon).
+        | Then fight against other players in Robocode style with (eventually...) seamless
         | on-line experience.
+      +alpha_notice
       a(href='register.html').action.button.half-size Register
       a(href='login.html').action.button.half-size Login
 

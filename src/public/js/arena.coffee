@@ -120,13 +120,14 @@ window.API =
 
     # Get angle beetwen two Position's
     getAngle: (a, b) ->
-      deltaY = b.getY() - a.getY()
-      deltaX = a.getX() - a.getX()
-      Math.atan2(deltaY, deltaX) * 180 / Math.Pi
+      deletaX = a.getX() - b.getX()
+      deletaY = a.getY() - b.getY()
+      angle = Math.atan2(deletaX, deletaY) * (180.0 / Math.PI)
+      return if angle < 0 then Math.abs(angle) else 360 - angle
 
     # Make a absolute angle (e.g. turn) to relative (e.g. TurnBy)
     makeRelative: (pos) ->
-      (pos + API.ship.angle) % 360
+      360 + pos - API.ship.angle
 
 
   # Gun controll
@@ -158,9 +159,9 @@ window.API =
 
   # Radar API
   radar:
-    scan: (dist) ->
+    scan: (dist = -1) ->
       #TODO: Use dist somehow
-      turn.getRaw()
+      lastUpdate
 
 
   #Logging util
@@ -200,6 +201,9 @@ evented.set API
 
 # Has the game started yet
 started = no
+
+# Last update to be used for the raddar
+lastUpdate = []
 
 
 
@@ -270,6 +274,7 @@ $('#ready').click ->
 
   evented.start code
   evented.emit 'start'
+  evented.emit 'turn'
 
 
 
@@ -324,19 +329,21 @@ addEntityDiv = (entity) ->
 
 # Board changed
 arena.on 'update', (data) ->
-  API.log.log 'Update recived', 0
-  console.log data
-  for entity in data
-    entity = new Entitydata entity
+  lastUpdate = _.cloneDeep(data.update)
 
+  API.log.log 'Update recived', 0
+
+  for entity in data.zombie
     # If it's a zombie-bullet delete it
     # F*** this shit! I give up for now! It seems delaying the
     # removeEntityDiv so that animateEntityDiv can finish
     # animating stops some of the bullets from ever being removed.
     # JavaScript: I'm watching you...
-    if entity.getType() is 'zombie-bullet'
-      removeEntityDiv entity
-      continue
+    console.log "Removing", entity
+    removeEntityDiv new Entitydata entity
+
+  for entity in data.update
+    entity = new Entitydata entity
 
     # If we are ourself capture the data onto the ship object
     if entity.getType() is 'ship' and entity.getName() is user

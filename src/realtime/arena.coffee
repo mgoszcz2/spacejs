@@ -86,7 +86,6 @@ arena.main = (io, rooms) ->
         room.addBullet userName, _.cloneDeep(user.getOriginPosition()), updateData.getFire()
 
       # Check has everyone finished their move
-      console.log room.allDone(), userName
       if room.allDone()
         room.resetDone()
         room.updateBullets()

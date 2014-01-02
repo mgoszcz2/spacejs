@@ -51,7 +51,7 @@ app.set 'view engine', 'jade'
 app.locals.pretty = true #Force jade to preety print everything
 app.enable 'strict routing'
 app.enable 'case sensitive routing'
-app.enable 'view cache'
+#app.enable 'view cache'
 app.use express.compress()
 app.use express.cookieParser()
 app.use express.bodyParser()

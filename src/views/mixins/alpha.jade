@@ -1,0 +1,16 @@
+mixin alpha_notice
+  .scroll-notice
+    h3 This is an alpha!
+    p Read this!
+
+    p
+      | Please contact 'me@mgo2.me' if you find any undocumented bugs.
+      br
+      | You can also contribute on 
+      a(href='https://github.com/mgoszcz2/spacejs') Github
+
+    h3 Known bugs
+    ul
+      li Fix ship rotating randomly
+      li Animate bullets, (see note in 'update' listener)
+      li Sometimes winner doesn't get message, (it seems to depend on joining order)

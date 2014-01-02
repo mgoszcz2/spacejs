@@ -1,13 +1,16 @@
 extends templates/base
 
+include mixins/alpha
+
 block head
     title space.js - Rooms
     link(rel='stylesheet', href='/css/game.css')
 
 block body
   .centred
-      h2.centred-wide-text Pick a room
-      ul#rooms.room-list: h3.centred-wide-text Please wait...
+    h2.centred-wide-text Pick a room
+    ul#rooms.room-list: h3.centred-wide-text Please wait...
+  +alpha_notice()
 
 block script
     script(src='/socket.io/socket.io.js')

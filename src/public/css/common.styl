@@ -133,9 +133,10 @@ form
   input[type='text'], input[type='password']
     margin-bottom: 1em
     outline: 0
-    border: 1px solid darken(light-accent-color, 10%)
+    border: 1px solid light-accent-border-color
     padding: 5px
     border-radius: resonable-radius
+    width: 400px
 
   label
     font-style: italic
@@ -150,3 +151,36 @@ form
 .grouper
   margin: resonable-margin
   text-align: center
+
+code
+  background-color: light-accent-color !important
+
+
+// API listing stuff
+.api-listing
+  margin-left: resonable-margin
+
+  .topic
+    border-bottom: 1px solid dark-text-color
+
+  .api
+    margin-bottom: resonable-margin * 4
+
+  pre > code
+    margin-left: -(resonable-margin)
+    padding: resonable-margin
+
+// Alpha notice div
+.scroll-notice
+  height: 150px
+  padding: resonable-margin
+  overflow-y: scroll
+  background-color: light-accent-color
+  margin: resonable-margin
+  border: 1px solid light-accent-border-color
+
+  > *:first-child
+    color: red
+
+  h1, h2, h3, h4
+    text-align: center
