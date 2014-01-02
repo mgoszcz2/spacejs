@@ -1,4 +1,11 @@
-rooms = io.connect "http://localhost/rooms"
+# Polyfill for window.location.origin support
+unless window.location.origin?
+  window.location.origin = "#{window.location.protocol}//#{window.location.hostname}"
+  window.location.origin += ":#{window.location.host}" if window.location.host
+
+# Try to send disconnect signal on unload
+rooms = io.connect "#{window.location.origin}/rooms"
+
 rooms.socket.on "error", (reason) ->
   console.error "Unable to connect to the server:", reason
 
