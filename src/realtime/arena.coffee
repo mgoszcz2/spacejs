@@ -62,15 +62,19 @@ arena.main = (io, rooms) ->
       # Update is a like old 'start'
       if rooms.get(roomName).isFull()
         utils.infoLog "Game in #{roomName} started!"
-        io.in(roomName).emit "update", rooms.get(socket.roomn).getAllUserData() 
+        io.in(roomName).emit "update", rooms.get(socket.roomn).getAllUserData()
 
 
     socket.on 'sevent', (event) -> #Ship event
       room = rooms.get roomName
       user = room.getUser userName
+      return unless user? #Race conditions!
 
       #Dont' to anything if done already
       return if user.isDone()
+      # Winning and loosing mechanism
+      return kick 'You died' if user.isDead()
+      return kick 'You won' if room.getLimit() isnt 1 and room.hasLastUser()
 
       # Update user...
       updateData = new storage.Event(event)
@@ -79,9 +83,10 @@ arena.main = (io, rooms) ->
 
       # and bullet data
       if updateData.hasFire()
-        room.addBullet new storage.Bullet(userName, _.cloneDeep(user.getPosition()), updateData.getFire())
+        room.addBullet userName, _.cloneDeep(user.getOriginPosition()), updateData.getFire()
 
       # Check has everyone finished their move
+      console.log room.allDone(), userName
       if room.allDone()
         room.resetDone()
         room.updateBullets()

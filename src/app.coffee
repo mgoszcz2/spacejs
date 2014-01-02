@@ -10,7 +10,7 @@ jade = require 'jade'
 socket = require 'socket.io'
 
 #Persistant session store
-RedisStore = require('connect-redis') express #Read their README
+MongoStore = require('connect-mongo') express
 
 #Passport libs
 passport = require 'passport'
@@ -37,9 +37,10 @@ passport.deserializeUser (id, done) ->
 app = express()
 
 #Akward stuff to make socket.io sessions work (and also persistant sessions)
-redisPref =
-  port: config.redisPort
-sessionStore = new RedisStore redisPref
+sessionStore = new MongoStore
+  db: 'master'
+  port: config.mongoPort
+  collection: config.sessionCollection
 sessionPref =
   secret: secret
   key: sessionCookie

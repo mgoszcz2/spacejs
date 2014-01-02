@@ -1,43 +1,43 @@
-#Helper functions
+# Helper functions
 xy = (x, y) ->
   x: x
   y: y
 config = {}
 
-#Port used by http server
+# Port used by http server
 config.port = 1024
 
-#Mode - not used ATM
+# Mode - not used ATM
 config.mode = 'development'
 
-#Port used by mongodb
+# Port used by mongodb
 config.mongoPort = 1025
 
-# Port used by redis
-config.redisPort = 1026
+# Session collection
+config.sessionCollection = 'sessions'
 
-#Bcrypt encryption cost
+# Bcrypt encryption cost
 config.bcryptCost = 10
 
-#Socket.IO log level
+# Socket.IO log level
 config.ioLogLevel = 1
 
-#Should Socket.IO log anything
+# Should Socket.IO log anything
 config.ioLogEnabled = no
 
-#Can Socket.IO use flash
+# Can Socket.IO use flash
 config.canUseFlash = no
 
-#Session secret
+# Session secret
 config.secret = 'hello world is the secret'
 
-#Session cookie name
+# Session cookie name
 config.sessionCookie = 'sid'
 
-#Size of the room
+# Size of the room
 config.roomSize = xy 300, 300
 
-#Max robot move in pixels
+# Max robot move in pixels
 config.maxMove = 10
 
 # Size of the avatar
@@ -47,16 +47,16 @@ config.avatarSize = xy 50, 50
 config.turnSpan = -1
 
 # Distance for bullets to move each turn (preferable same as config.maxMove)
-config.bulletMaxMove = config.maxMove
+config.bulletMaxMove = config.maxMove + 10
 
-#Default life for a user
+# Default life for a user
 config.defaultLive = 100
 
-#Userdata hit values
+# Userdata hit values
 config.hitValues =
   bullet: 20
 
-#Robot starting postions
+# Robot starting postions
 config.startPos = [
   xy 50, 50
   xy 50, config.roomSize.y - 50

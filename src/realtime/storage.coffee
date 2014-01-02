@@ -26,6 +26,8 @@ calcNewPositon = (position, angle, dist) ->
     position.y = (Math.cos(radAngle) * dist) + position.y
     return position
 
+getDist = (a, b) ->
+  Math.sqrt Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)
 
 # Stores a new ship event (called sevent from scoket.io side)
 class storage.Event
@@ -67,18 +69,27 @@ class storage.Userdata
     @hitWall = no
     @done = no
     @dead = no
-    @live = config.defaultLive
+    @life = config.defaultLive
 
   # Update userdata using the ShipEvent event
   update: (event, roomSize) ->
+    # Keep old data..
+    oldPosition = _.cloneDeep @position
+    oldHitWall = @hitWall
+
+    # Allow user to move..
     @_turn event.getTurn() if event.hasTurn()
     @_move event.getMove() if event.hasMove()
-    @_hasHitWall roomSize
+    @hitWall = @_hasHitWall roomSize
+
+    # Jump back if hit wall but only if you waren't there already
+    # this allosw to get to the wall in the first place
+    @position = oldPosition if @hitWall and oldHitWall
 
   #Take away life for event string as specfied in the config
   handleHit: (event) ->
-    @live -= config.hitValues[event]
-    @dead = yes if @live <= 0
+    @life -= config.hitValues[event]
+    @dead = yes if @life <= 0
 
   setDone: -> @done = yes
   unsetDone: -> @done = no
@@ -95,15 +106,37 @@ class storage.Userdata
 
   # Update 'hitWall' property
   _hasHitWall: (roomSize) ->
-    x = @position.x - (@avatarSize.x / 2)
-    y = @position.y - (@avatarSize.y / 2)
-    @hitWall = x <= 0 or x >= roomSize.x or y <= 0 or y >= roomSize.y
+    return yes if @position.x + @avatarSize.x >= roomSize.x
+    return yes if @position.y + @avatarSize.y >= roomSize.y
+
+    # Left and top edges
+    # No need to play with @avatarSize - already top left conrer of the avatar
+    return yes if @position.y <= 0
+    return yes if @position.x  <= 0
+
+    # Nothing happend here
+    return no
 
   # Used few places in the code
   getPosition: -> @position
+  getAngle: -> @angle
+  getOriginPosition: ->
+    {
+      x: (@avatarSize.x / 2) + @position.x
+      y: (@avatarSize.y / 2) + @position.y
+    }
+  # Leave here just in case
+  getFrontTipPositon: ->
+    pos = calcNewPositon @getOriginPosition(), @angle, (@avatarSize.y / 2)
+    {
+      x: pos.x
+      y: pos.y
+    }
 
   # Check wether dead
   isDead: -> @dead
+
+  getAvatarSize: -> @avatarSize
 
   # Get a JSON of userdata
   jsonify: ->
@@ -111,6 +144,7 @@ class storage.Userdata
     angle: @angle
     hitWall: @hitWall
     dead: @dead
+    life: @life
     pos:
       x: @position.x
       y: @position.y
@@ -120,7 +154,7 @@ class storage.Userdata
 
 
 class storage.Bullet
-  constructor: (@userName, @position, @angle) ->
+  constructor: (@userName, @position, @angle, @id) ->
     @turnSpanLeft = config.turnSpan
     @goneMark = no
     @hitWall = no
@@ -145,11 +179,20 @@ class storage.Bullet
     return yes if @_hasHitWall roomSize
     return no
 
-  hasHit: (pos) -> no #TODO: Add code
+  hasHit: (pos, avatarSize) ->
+    if getDist(@position, pos) <= (avatarSize.x / 2)
+      return yes
+    return no
+
+  getUserName: -> @userName
+  getID: -> @id
+  getPosition: -> @position
 
   jsonify: ->
     {
       angle: @angle
+      name: @userName
+      id: @id
       pos:
         x: @position.x
         y: @position.y
@@ -163,8 +206,15 @@ class storage.Room
   # Set a room with limit
   constructor: (@limit, @roomSize, @startPos) ->
     @count = 0
+    @pleft = @limit
+    @started = no
     @users = {}
     @bullets = []
+    @lastID = -1
+    @died = []
+
+  # Checking wether done
+  hasLastUser: -> @started and @pleft is 1
 
   # Rooms get user from room
   getUser: (userName) ->
@@ -181,11 +231,15 @@ class storage.Room
   # Make user leave the room
   leaveUser: (userName) ->
     delete @users[userName]
+    @pleft -= 1
     # If this was the last player ready the room
-    if Object.keys(@users).length is 0
+    if @pleft is 0
       @count = 0
       @users = {}
       @bullets = []
+      @pleft = @limit
+
+  getUserCount: -> Object.keys(@users).length
 
   # Check is room full
   isFull: -> @limit is @count
@@ -194,7 +248,10 @@ class storage.Room
   allDone: ->
     doneCount = 0
     doneCount += 1 for n, userdata of @users when userdata.isDone()
-    doneCount is @limit
+
+    done = doneCount is @pleft #Amount of players left
+    @started = yes if done unless @started
+    return done #F*** make sure we still return the status
 
   resetDone: ->
     userdata.unsetDone() for n, userdata of @users
@@ -214,31 +271,46 @@ class storage.Room
       userdata.name = name
       data.push userdata
 
-    i = 0
     for bullet in @bullets
       bullet = bullet.jsonify()
       bullet.type = 'bullet'
       #Dash is not in valid username regex: /^\w{2,32}$/g
-      bullet.name = "-bullet-#{i += 1}"
+      bullet.name = "-bullet-#{bullet.id}"
+      data.push bullet
+
+    # 'zombie-bullet' entity! show bullet's to be deleted
+    # Thanks. Alice Barrett for the suggesestion
+    for bullet in @died
+      bullet = bullet.jsonify()
+      bullet.type = 'zombie-bullet'
+      # Name stays the same so it can be removed
+      bullet.name = "-bullet-#{bullet.id}"
       data.push bullet
 
     return data
 
-  addBullet: (bullet) ->
-    @bullets.push bullet
+  addBullet: (userName, pos, angle) ->
+    @bullets.push new storage.Bullet(userName, pos, angle, @lastID += 1)
 
   updateBullets: ->
+    # No bullets have died... until this point
+    @died = []
+
     # Update all the positions
     newBullets = []
     for bullet in @bullets
       bullet.update @roomSize
 
-      for name, userdata of @users
-        if bullet.hasHit userdata.getPosition()
+      for name, userdata of @users when bullet.getUserName() isnt name
+        if bullet.hasHit userdata.getOriginPosition(), userdata.getAvatarSize()
           userdata.handleHit 'bullet'
           bullet.setGoneMark yes
 
-      newBullets.push bullet unless bullet.isGone @roomSize
+      if bullet.isGone @roomSize
+        @died.push bullet
+      else
+        # Cheating... jsonify() also returns 'pos'
+        newBullets.push bullet
 
     # Now with Gone stuff removed!
     @bullets = newBullets
