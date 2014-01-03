@@ -274,7 +274,6 @@ $('#ready').click ->
 
   evented.start code
   evented.emit 'start'
-  evented.emit 'turn'
 
 
 

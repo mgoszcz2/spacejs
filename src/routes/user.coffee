@@ -1,10 +1,10 @@
+user = require('../models/user')
+utils = require('../libs/utils')
+helpers = require('../libs/helpers')
+
 #Note to self: Do not fall-back if POST data absent: Unless someone is
 #messing with the system, the fields will always be present
 module.exports = (app, passport) ->
-  user = require('../models/user')
-  utils = require('../libs/utils')
-  helpers = require('../libs/helpers')
-  
   #passport.js technomagic - It's wonderful but it doesn't seem to
   #    work to well with whikser templates even using 'flash-connect' lib,
   #    the workaround is to use a fancy callback system and use native rendering
@@ -12,6 +12,7 @@ module.exports = (app, passport) ->
   app.post '/login.html', helpers.ensureNew('/rooms.html'), (request, response, next) ->
     passport.authenticate('local', (err, user, info) ->
       utils.tryLog err, 'routes/user.post(/login)'
+      utils.log "User #{user} is trying to login"
       unless user
         response.render 'login',
           error: true
@@ -21,6 +22,7 @@ module.exports = (app, passport) ->
           if err
             utils.tryLog err, 'routes/user.post(/login){request.logIn}'
           else
+            utils.log "User #{user} logged in"
             response.redirect 'rooms.html'
 
     ) request, response, next
@@ -41,7 +43,8 @@ module.exports = (app, passport) ->
     password = request.body.password
     password2 = request.body.password2
     email = request.body.email
-    if username and email and password and password2
+
+    if username? and email? and password? and password2?
       errors.misstype = true unless password is password2
       errors.badPass = true unless /^[\w ]{6,}$/g.test(password) #Words and spaces min 6
       errors.badName = true unless /^\w{2,32}$/g.test(username) #Just words min 2, max 32
@@ -54,15 +57,20 @@ module.exports = (app, passport) ->
           #We validated the shit out of registration data - make decision
           if errors.misstype or errors.hasEmail or errors.hasName or errors.badName or errors.badEmail or errors.badPass
 
-            #Add additional data to error data to help out register
-            #              form to be user friendly
-            errors.error = true
-            errors.username = username
-            errors.password = password
-            errors.password2 = password2
-            errors.email = email
+            #Add additional data to error data to help out register 
+            errors.error = {}
+            # Start with f to prevent conflicting with base template
+            errors.fusername = username
+            errors.fpassword = password
+            errors.fpassword2 = password2
+            errors.femail = email
+
+            # Nice logging
+            utils.log "User failed to register data: #{username}:#{email}"
+
             response.render 'register', errors
           else
+            utils.log "User #{username} (#{email}) registred"
             user.register username, email, password
             response.redirect '/login.html'
 
@@ -72,7 +80,6 @@ module.exports = (app, passport) ->
     request.logout()
     response.redirect '/'
 
-  
   #Oh.. Express.. Why can't you figure this out for yourself
   app.get '/login.html', helpers.ensureNew('/rooms.html'), (request, response) ->
     response.render 'login',

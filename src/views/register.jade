@@ -4,22 +4,31 @@ block head
     title space.js - Register
 
 block body
-    if error
-        h4 Error occured
-
     .centred: .grouper
       h2 Register
       form(method='post', action='register.html')
         label(for='username') Name (Using A-z and _, 2-32 letters)
-        input(name='username', type='text', value=username)
+        if badName
+          .error Your name must use characters A-z 0-9 _
+        else if hasName
+          .error You username is already taken
+        input(name='username', type='text', value=fusername)
 
-        label(for='email') Email (Valid)
-        input(name='email', type='text', value=email)
+        label(for='email') Email (Valid) #{error.email}
+        if badEmail
+          .error Your name enter a valid email
+        else if hasEmail
+          .error Your email is already used
+        input(name='email', type='text', value=femail)
 
-        label(for='password') Password (Using A-z and _, minimum 6 letters)
-        input(name='password', type='password', value=password)
+        label(for='password') Password (Using A-z and _, minimum 6 letters) #{error.password}
+        if badPass
+          .error Your password must be minimum 6 letters and consist of A-z 0-9 _
+        input(name='password', type='password', value=fpassword)
 
-        label(for='password2') Retype password
-        input(name='password2', type='password', value=password2)
+        label(for='password2') Retype password #{error.retype}
+        if misstype
+          .error Your passwords must match
+        input(name='password2', type='password', value=fpassword2)
 
         input(type='submit', value='Register').button.action
