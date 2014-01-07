@@ -1,0 +1,35 @@
+"Timestamp","What's your age?","How would you rate the effectiveness of Spacejs.org as a teaching tool?","Do you have any other specific feedback?","Did you find any bugs?","If so what?","What programming language you would like to see supported?","Would you recommend this to a friend?","Why?","In your opinion, how experienced should the target audience be?","Did you had fun using Spacejs.org","What browser did you use?","Was the API well documented?","Was the API easy to use?","Was the API feature complete?","Do you think the API is beginner accessible?","Overall, how would you rate the API?","Do you have any other feedback on the API?"
+"2014/01/03 3:17:18 am CET","10-20","4","Some sample rooms with respawning bots would be nice so I can retry code repeatedly.","Yes","Some rooms didn't work and showed errors, such as this:
+
+on('start', function(){
+  ship.ready();
+});
+ 
+on('turn', function(){
+  //Show current life
+  utils.print('Life' + ship.life)
+  cur = radar.scan();
+  
+  for(i in cur){
+      if(i.type()=='ship'){
+        gun.turn(utils.getAngle(i.pos,ship.position()));
+        gun.fire();
+        ship.ready();
+      }
+  }
+  
+  gun.fire();
+  ship.ready();
+});
+
+","Python would be nice. Lisp.","Yes","It shows the basic concepts of programming well, arrays, variables, co-ordinates on 2D planes, loops, functions, etc. Great for learning.","2","Yes","Chrome","Yes","Yes","No","Yes","4","In the future, a page explaining basic programming paradigms would be necessary, such as what functions, arrays, etc are. But for someone familiar with these concepts, the API page is perfect."
+"2014/01/03 3:47:55 pm CET","20-30","3","maybe make it a bit easier to get started, how about a panel of sample text on-screen to copy from.","Yes","Could not register an account with this password: yU9$QOC#%obf0Zrw
+
+The error message shown was unspecific about why.","Java","Yes","Because they knew the risks when they agreed to be my friend.","5","No","Chrome","Yes","No","Yes","No","3","I didn't look at the api but I had no choice but to comment on it."
+"2014/01/03 3:54:57 pm CET","10-20","4","There is lots of bugs.","No","","CoffeeScript","Yes","It's like a neat idea.","4","Yes","Chrome","Yes","No","Yes","No","4",""
+"2014/01/03 7:44:24 pm CET","20-30","3","Why do you limit what characters and lengths in your password field? If there's no technical reason to do so, don't. And if there is a technical reason, I'd find that rather worrying. Passwords with larger choice of available characters (i.e. symbols etc) are more secure. As are longer passwords. Don't force people to be less secure. (It's ok to limit password length, but if you do, make sure the limit is high: minimum 50 characters, preferably more.)","Yes","The error message for a username that's too short gives the wrong feedback: ""Your name must use characters A-z 0-9 _""","","No","Registration password restrictions put me off","2","No","Safari","Yes","Yes","Yes","Yes","3",""
+"2014/01/03 11:54:54 pm CET","20-30","3","As a learning tool, I think feedback for the user of spaces while coding is immensely important, so if there's errors in the code they've written, the sooner they know about them, the better. Perhaps integration with some sort of lint tool, and feedback for when there are exceptions thrown.","Yes","Minor editing issue - cursor is offset to the right (on Safari on OSX).","python","No","I almost would. It's fun, it's online, but the lack of feedback for the user makes it difficult.","4","Yes","Safari","Yes","Yes","Yes","Yes","4",""
+"2014/01/04 2:23:17 pm CET","30-40","2","Try and have anonymous play so people don't have to register, people would just like to play but their scores will not be saved. Have also a 1-player Vs computer mode.
+
+Maybe a tutorial on how to start running it would be good, even with a video captured instruction video you embed onto page if you have no time to write the tutorial.","No","","Python or HTML5","No","Still to early stage, it's not intuitive on what to do. Needs a tutorial, even for someone who is experienced in coding, from experiencing other JS realtime game tutorials, it may not keep the person playing around a bit more.","4","No","Chrome","Yes","Yes","No","Yes","4","Other than more instructions to get people up and going, it's a great way to teach JS (other languages). Keep up with the great work."
+
